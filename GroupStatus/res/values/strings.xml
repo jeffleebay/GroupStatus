@@ -8,6 +8,7 @@
     <string name="defaul_Name">UserName</string>
     <string name="defaul_Status">UserStatus</string>
     <string name="action_FrndMngr">Friends</string>
+    <string name="desc">Welcome to Group Status</string>
 
 
 </resources>
