@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GroupStatus</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="send">Collect</string>
+    <string name="defaul_Name">UserName</string>
+    <string name="defaul_Status">UserStatus</string>
+    <string name="action_FrndMngr">Friends</string>
+
+
+</resources>
