@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,10 +71,15 @@ public class StatusReporter extends Activity {
 			public void onClick(View v) {
 				EditText editText = (EditText) findViewById(R.id.edit);
 				Toast.makeText(getApplicationContext(),
-						editText.getText().toString(), Toast.LENGTH_LONG)
+						editText.getText().toString(), Toast.LENGTH_SHORT)
 						.show();
+	            Intent intent = new Intent(StatusReporter.this, SensorCollector.class);
+	            intent.putExtra("status", editText.getText().toString());
+	            startActivity(intent);
 			}
+
 		});
+		
 
 	}
 
