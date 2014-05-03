@@ -10,9 +10,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -67,12 +69,20 @@ public class StatusReporter extends Activity {
 		setViewAndOnItemClickListener(listView3, 3);
 
 		final TextView textView = (TextView) findViewById(R.id.reportTextView);
+		final EditText editText = (EditText) findViewById(R.id.edit);
 		textView.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				EditText editText = (EditText) findViewById(R.id.edit);
-				Toast.makeText(getApplicationContext(),
-						editText.getText().toString(), Toast.LENGTH_SHORT)
-						.show();
+				
+				//hide keyboard
+				InputMethodManager imm = (InputMethodManager)getSystemService(
+					      Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+				
+				
+//				Toast toast = Toast.makeText(getApplicationContext(),editText.getText().toString(), Toast.LENGTH_SHORT);
+//            	toast.setGravity(Gravity.CENTER, 0, 50);
+//            	toast.show();
+            	
 	            Intent intent = new Intent(StatusReporter.this, SensorCollector.class);
 	            intent.putExtra("status", editText.getText().toString());
 	            startActivity(intent);
@@ -80,6 +90,7 @@ public class StatusReporter extends Activity {
 
 		});
 		
+		editText.setText("Coding in Vista del Campo");	
 
 	}
 

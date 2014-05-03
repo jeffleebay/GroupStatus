@@ -2,28 +2,114 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+     >
 
-    <TextView
-        android:id="@+id/textViewYourStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Your Status:" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/textViewTheStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:hint="status" />
+        <TextView
+            android:id="@+id/textViewYourStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Status: "
+            android:textSize="20sp" />
 
+        <TextView
+            android:id="@+id/textViewTheStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="status"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/TextViewNoise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Noise Level: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/TextViewNoiseDegree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="20sp" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/TextViewNoiseSum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Avg Noise Level: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/TextViewNoiseDegreeSum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0"
+            android:textSize="20sp" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/TextViewNoise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location: "
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/TextViewNoiseDegree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="33.6432551,-117.8420085"
+            android:textSize="20sp" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
     <Button
-        android:id="@+id/buttonScan"
+        android:id="@+id/buttonRecord"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Record" />
+    <Button
+        android:id="@+id/buttonStop"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop" />
+    </LinearLayout>
 
+    <TextView
+            android:id="@+id/TextViewNoise"
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:text="  " />
+    <TextView
+            android:id="@+id/TextViewNoise"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="WiFi access: " />
+    
     <ListView
         android:id="@+id/listWiFi"
         android:layout_width="match_parent"

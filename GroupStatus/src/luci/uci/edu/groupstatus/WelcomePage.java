@@ -148,7 +148,7 @@ public class WelcomePage extends Activity {
 			
 			    }.start();
 		    	
-		    	Intent i = new Intent(WelcomePage.this, MainActivity.class);		    	
+		    	Intent i = new Intent(WelcomePage.this, StatusReporter.class);		    	
 		    	startActivity(i); 
 	    	}else{
 	    		Toast toast = Toast.makeText(getApplicationContext(),"Login error. Invalid username or password.", Toast.LENGTH_SHORT);
