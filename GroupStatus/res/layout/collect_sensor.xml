@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-     >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +21,6 @@
             android:layout_height="wrap_content"
             android:hint="status"
             android:textSize="20sp" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -43,7 +41,7 @@
             android:text="0.0"
             android:textSize="20sp" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -62,7 +60,7 @@
             android:text="0.0"
             android:textSize="20sp" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -81,39 +79,86 @@
             android:text="33.6432551,-117.8420085"
             android:textSize="20sp" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-    <Button
-        android:id="@+id/buttonRecord"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Record" />
-    <Button
-        android:id="@+id/buttonStop"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop" />
+
+        <Button
+            android:id="@+id/buttonRecord"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record" />
+
+        <Button
+            android:id="@+id/buttonStop"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop" />
     </LinearLayout>
 
-    <TextView
-            android:id="@+id/TextViewNoise"
-            android:layout_width="wrap_content"
-            android:layout_height="10dp"
-            android:text="  " />
-    <TextView
-            android:id="@+id/TextViewNoise"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:text="WiFi access: " />
-    
-    <ListView
-        android:id="@+id/listWiFi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/space"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:text="  " />
+
+            <TextView
+                android:id="@+id/TextViewNoise"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="WiFi access: " />
+
+            <ListView
+                android:id="@+id/listWiFi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stackFromBottom="true"
+                android:transcriptMode="alwaysScroll" >
+            </ListView>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/space"
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:text="  " />
+
+            <TextView
+                android:id="@+id/TextViewNoise"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Noise level: " />
+
+            <ListView
+                android:id="@+id/listNoise"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stackFromBottom="true"
+                android:transcriptMode="alwaysScroll" >
+            </ListView>
+        </LinearLayout>
+        
+    </LinearLayout>
 
 </LinearLayout>
