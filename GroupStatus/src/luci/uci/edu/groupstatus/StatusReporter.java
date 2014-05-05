@@ -183,8 +183,8 @@ public class StatusReporter extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_FrndMngr:
-			Intent intentI = new Intent(this, FriendManager.class);
-			startActivity(intentI);
+//			Intent intentI = new Intent(this, FriendManager.class);
+//			startActivity(intentI);
 			break;
 		}
 
