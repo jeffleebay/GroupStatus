@@ -17,12 +17,17 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +43,44 @@ public class WelcomePage extends Activity {
 		
 		addListenerOnText();
 		
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+		if (!enabled) {
+			showSettingsAlert(WelcomePage.this);
+		}
+		
+	}
+	
+	public void showSettingsAlert(final Context mContext) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+
+		// Setting Dialog Title
+		alertDialog.setTitle("Location service disabled");
+
+		// Setting Dialog Message
+		alertDialog.setMessage("GPS is not enabled. Please enable it in Settings menu.");
+
+		// Setting Icon to Dialog
+		//alertDialog.setIcon(R.drawable.delete);
+
+		// on pressing cancel button
+				alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+		
+		// On pressing Settings button
+		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				mContext.startActivity(intent);
+			}
+		});
+
+		// Showing Alert Message
+		alertDialog.show();
 	}
 
 	public void addListenerOnText() {
