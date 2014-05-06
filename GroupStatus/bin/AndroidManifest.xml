@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="luci.uci.edu.groupstatus.SensorDataCollector"
+            android:name="luci.uci.edu.groupstatus.StatusReporter"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -30,15 +30,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="luci.uci.edu.groupstatus.SensorDataCollector"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="luci.uci.edu.groupstatus.WelcomePage"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name="luci.uci.edu.groupstatus.StatusReporter"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name="luci.uci.edu.groupstatus.SensorCollector"
             android:screenOrientation="portrait" >
         </activity>
         <activity android:name="luci.uci.edu.groupstatus.MainActivity" >

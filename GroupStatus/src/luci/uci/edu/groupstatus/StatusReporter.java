@@ -83,14 +83,14 @@ public class StatusReporter extends Activity {
 //            	toast.setGravity(Gravity.CENTER, 0, 50);
 //            	toast.show();
             	
-	            Intent intent = new Intent(StatusReporter.this, SensorCollector.class);
+	            Intent intent = new Intent(StatusReporter.this, SensorDataCollector.class);
 	            intent.putExtra("status", editText.getText().toString());
 	            startActivity(intent);
 			}
 
 		});
 		
-		editText.setText("Coding in Vista del Campo");	
+		editText.setText("Coding in Vista del Campo ");	
 
 	}
 
