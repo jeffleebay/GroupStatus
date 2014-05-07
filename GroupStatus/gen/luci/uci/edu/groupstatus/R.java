@@ -47,8 +47,8 @@ public final class R {
         public static final int TextViewTheLocation=0x7f09000e;
         public static final int TextViewWiFi=0x7f090008;
         public static final int TextView_TheLocation=0x7f09004b;
-        public static final int action_FrndMngr=0x7f09005a;
-        public static final int action_settings=0x7f090059;
+        public static final int action_FrndMngr=0x7f09005b;
+        public static final int action_settings=0x7f09005a;
         public static final int area_Button=0x7f090040;
         public static final int area_ListView=0x7f09004c;
         public static final int area_Location=0x7f090035;
@@ -73,7 +73,8 @@ public final class R {
         public static final int divider_SnL=0x7f090049;
         public static final int divider_WiFi=0x7f090026;
         public static final int edit=0x7f090001;
-        public static final int linearLayoutForLogIn=0x7f090054;
+        public static final int linearLayoutForLogIn=0x7f090055;
+        public static final int linearLayout_Listview=0x7f090050;
         public static final int linearLayout_Location=0x7f090039;
         public static final int linearLayout_Noise=0x7f09002e;
         public static final int linearLayout_SnL_L=0x7f09004a;
@@ -88,10 +89,10 @@ public final class R {
         public static final int listView2=0x7f090004;
         public static final int listView3=0x7f090005;
         public static final int listWiFi=0x7f090013;
-        public static final int list_Noise=0x7f090051;
-        public static final int list_WiFi=0x7f090050;
-        public static final int loginArea=0x7f090055;
-        public static final int loginTextView=0x7f090058;
+        public static final int list_Noise=0x7f090052;
+        public static final int list_WiFi=0x7f090051;
+        public static final int loginArea=0x7f090056;
+        public static final int loginTextView=0x7f090059;
         public static final int progressBarWiFi=0x7f090009;
         public static final int progressBar_Location=0x7f09003e;
         public static final int progressBar_Noise=0x7f090033;
@@ -102,7 +103,7 @@ public final class R {
         public static final int reportTextView=0x7f090018;
         public static final int sensor_data_collector=0x7f09001e;
         public static final int space=0x7f090011;
-        public static final int space_ButtomOfThePage=0x7f090052;
+        public static final int space_ButtomOfThePage=0x7f090053;
         public static final int space_Button=0x7f090041;
         public static final int space_ListView=0x7f09004d;
         public static final int space_Location=0x7f090036;
@@ -125,9 +126,9 @@ public final class R {
         public static final int textView_ReportButton=0x7f090042;
         public static final int textView_WiFi=0x7f090024;
         public static final int textView_WiFi_status=0x7f090025;
-        public static final int userID=0x7f090056;
-        public static final int userPW=0x7f090057;
-        public static final int welcomePage=0x7f090053;
+        public static final int userID=0x7f090057;
+        public static final int userPW=0x7f090058;
+        public static final int welcomePage=0x7f090054;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

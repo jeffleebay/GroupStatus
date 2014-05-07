@@ -534,6 +534,7 @@
                 android:text=" " />
 
             <LinearLayout
+                android:id="@+id/linearLayout_Listview"
                 android:layout_width="260dp"
                 android:layout_height="260dp"
                 android:layout_below="@+id/space_ListView"

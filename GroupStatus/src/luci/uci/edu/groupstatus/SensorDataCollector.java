@@ -44,6 +44,13 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class SensorDataCollector extends Activity implements OnClickListener {
+	
+	//Vars for storing collected data
+	Boolean DEVELOPER_MODE = false;
+	int asyncTasksProgress = 0;
+	HashMap<String, String> SensorResult = new HashMap<String, String>();
+//	ArrayList<HashMap<String, String>> SensorResult = new ArrayList<HashMap<String, String>>();
+	
 
 	// Vars for WiFi
 	WifiManager wifi;
@@ -108,12 +115,12 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	};
 
 	// Vars for Status
-	Button buttonWiFi;
-	Button buttonNoise;
+	TextView textViewReportButton;
+	ImageView imageViewReportButton;
 
 	// Vars for location
-	LocationManager locationManager;
-	LocationListener locationListener;
+//	LocationManager locationManager;
+//	LocationListener locationListener;
 
 	//Vars for Location progress bar
 	private ProgressBar mProgressLocation;
@@ -133,24 +140,34 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			}
 		}
 	};
+	
+	//Vars for Async Tasks
+	ScanWiFiAccess scanWiFiAccess;
+	DetectBackgroundNoise detectBackgroundNoise;
+	GetAddressTask getAddressTask;
+	CheckUpdatingProgress checkUpdatingProgress;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sensor_data_collector);
+		
+		if (!DEVELOPER_MODE) TurnOffDeveloperMode();
 
 		// Vars for Status
 		TextView textView = (TextView) findViewById(R.id.textViewTheStatus);
 		if (getIntent().hasExtra("status")) {
 			String status = getIntent().getExtras().getString("status");
-			textView.setText(status);
+			textView.setText(status);	
+			SensorResult.put("status", status);
 		}
 
 		// Vars for buttons
-		//		buttonWiFi = (Button) findViewById(R.id.buttonWiFi);
-		//		buttonWiFi.setOnClickListener(this);
-		//		buttonNoise = (Button) findViewById(R.id.buttonNoise);
-		//		buttonNoise.setOnClickListener(this);
+		textViewReportButton = (TextView) findViewById(R.id.textView_ReportButton);
+		textViewReportButton.setVisibility(View.INVISIBLE);
+		imageViewReportButton = (ImageView) findViewById(R.id.area_Button);
+		imageViewReportButton.setVisibility(View.INVISIBLE);
+		imageViewReportButton.setOnClickListener(this);
 
 		// Vars for WiFi
 		listViewForWiFiResults = (ListView) findViewById(R.id.list_WiFi);
@@ -216,28 +233,30 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		mSensor = new SoundMeter();
 
 		// Vars for location
-		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		LocationListener locationListener = new MyLocationListener();
+		
 
 		//Activate
-		ScanWiFiAccess scanWiFiAccess = new ScanWiFiAccess(SensorDataCollector.this);
+		
+		scanWiFiAccess = new ScanWiFiAccess(SensorDataCollector.this);
 		scanWiFiAccess.execute(WIFI_POLL_Times);
 
-		DetectBackgroundNoise detectBackgroundNoise = new DetectBackgroundNoise(SensorDataCollector.this);
+		detectBackgroundNoise = new DetectBackgroundNoise(SensorDataCollector.this);
 		detectBackgroundNoise.execute(NOISE_POLL_Times);
 
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-
-		Animation animation = AnimationUtils.loadAnimation(SensorDataCollector.this, R.anim.blink);
-
+		getAddressTask = new GetAddressTask(SensorDataCollector.this);
+		getAddressTask.execute(0);
+		
+		checkUpdatingProgress = new CheckUpdatingProgress();
+		checkUpdatingProgress.execute(0);
+		
 		TextView textviewWiFi = (TextView) findViewById(R.id.textView_WiFi_status);
-		textviewWiFi.startAnimation(animation);
+		textviewWiFi.startAnimation((Animation) AnimationUtils.loadAnimation(SensorDataCollector.this, R.anim.blink));
 
 		TextView textviewNoise = (TextView) findViewById(R.id.textView_Noise_status);
-		textviewNoise.startAnimation(animation);
+		textviewNoise.startAnimation((Animation) AnimationUtils.loadAnimation(SensorDataCollector.this, R.anim.blink));
 
 		TextView textviewLocation = (TextView) findViewById(R.id.textView_Location_status);
-		textviewLocation.startAnimation(animation);
+		textviewLocation.startAnimation((Animation) AnimationUtils.loadAnimation(SensorDataCollector.this, R.anim.blink));
 
 		mProgressWiFi = (ProgressBar) findViewById(R.id.progressBar_WiFi);
 		mHandlerWiFi.post(updateProgressBarWiFi);
@@ -261,65 +280,81 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	public void onResume() {
 		super.onResume();
 	}
+	
+	public void onClick(View view) {
+
+		String keys[] = { "status", "wifi", "noise", "location", "address" };
+
+		switch (view.getId()) {
+		case R.id.area_Button:
+			for (int i = 0; i < keys.length; i++)
+				Log.i(keys[i], SensorResult.get(keys[i]));
+		}
+	}
+	
+	public void TurnOffDeveloperMode(){
+//		TextView tv;
+//		ImageView iv;
+		findViewById(R.id.area_SnL).setVisibility(View.GONE);
+		findViewById(R.id.area_shadow_buttom_SnL).setVisibility(View.GONE);
+		findViewById(R.id.area_shadow_side_SnL).setVisibility(View.GONE);
+//		findViewById(R.id.space_ListView).setVisibility(View.GONE);        //disabled for margin bottom 
+		findViewById(R.id.linearLayout_SnL_S).setVisibility(View.GONE);
+		findViewById(R.id.divider_SnL).setVisibility(View.GONE);
+		findViewById(R.id.linearLayout_SnL_L).setVisibility(View.GONE);
+		
+		findViewById(R.id.area_ListView).setVisibility(View.GONE);
+		findViewById(R.id.area_shadow_buttom_ListView).setVisibility(View.GONE);
+		findViewById(R.id.area_shadow_side_ListView).setVisibility(View.GONE);
+		findViewById(R.id.space_ListView).setVisibility(View.GONE);
+		findViewById(R.id.linearLayout_Listview).setVisibility(View.GONE);
+		findViewById(R.id.space_ButtomOfThePage).setVisibility(View.GONE);
+	}
 
 	private class MyLocationListener implements LocationListener {
 
 		@Override
-		public void onLocationChanged(Location loc) {
-
-			String latitude = Double.toString(loc.getLatitude());
-			String longitude = Double.toString(loc.getLongitude());
-			Log.i("location", latitude + "," + longitude);
-
-			String stringForTextView = latitude.substring(0, 4) + " , " + longitude.substring(0, 7);
-
-			GetAddressTask getAddressTask = new GetAddressTask(SensorDataCollector.this);
-			getAddressTask.execute(loc);
-		}
+		public void onLocationChanged(Location loc) {}
 
 		@Override
-		public void onProviderDisabled(String provider) {
-		}
+		public void onProviderDisabled(String provider) {}
 
 		@Override
-		public void onProviderEnabled(String provider) {
-		}
+		public void onProviderEnabled(String provider) {}
 
 		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-		}
+		public void onStatusChanged(String provider, int status, Bundle extras) {}
 	}
 
-	public void onClick(View view) {
-
-		//		switch (view.getId()) {
-		//		case R.id.buttonWiFi:
-		//			mProgressWiFi = (ProgressBar) findViewById(R.id.progressBar_WiFi);
-		//			mHandlerWiFi.post(updateProgressBarWiFi);
-		//			break;
-		//
-		//		case R.id.buttonNoise:
-		//			mProgressNoise = (ProgressBar) findViewById(R.id.progressBar_Noise);
-		//			mHandlerNoise.post(updateProgressBarNoise);
-		//			break;
-		//		}
-	}
-
-	private class GetAddressTask extends AsyncTask<Location, Void, String> {
+	private class GetAddressTask extends AsyncTask<Integer, Void, String> {
 		Context mContext;
+		Location location;
+		LocationManager locationManager;
+		LocationListener locationListener;
 
 		public GetAddressTask(Context context) {
 			mContext = context;
+			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			locationListener = new MyLocationListener();
+		}
+		
+		protected void onPreExecute() {
+
+//			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+			locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, locationListener, null);
+			location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			Log.i("location", location.getLatitude() + "," + location.getLongitude());
+			SensorResult.put("location", location.getLatitude() + "," + location.getLongitude());
 		}
 
 		@Override
-		protected String doInBackground(Location... params) {
+		protected String doInBackground(Integer... params) {
 			Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-			Location loc = params[0];
+			int par = params[0];
 			List<Address> addresses = null;
 			String addressText = "";
 			try {
-				addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+				addresses = gcd.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -351,7 +386,11 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			textviewLocation.setText("Updated");
 			ImageView imageViewLocation = (ImageView) findViewById(R.id.progressFinishedIcon_Location);
 			imageViewLocation.setVisibility(View.VISIBLE);
+			asyncTasksProgress++;
+			
+			SensorResult.put("address", address);
 
+			Log.i("address", address);
 		}
 
 	}
@@ -360,6 +399,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 		private ProgressDialog dialog;
 		private Context context; // application context.
+		private String combinedScannedWiFiResult = "";
 
 		public ScanWiFiAccess(Activity activity) {
 			context = activity;
@@ -409,19 +449,18 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 						numberOfWiFiPointsFound = numberOfWiFiPointsFound - 1;
 
 						while (numberOfWiFiPointsFound >= 0) {
-							// String wiFiAccessPoint =
-							// scannedWiFiResults.get(numberOfWiFiPointsFound).SSID
-							// + "  "
-							// +
-							// scannedWiFiResults.get(numberOfWiFiPointsFound).capabilities;
-							String wiFiAccessPoint = scannedWiFiResults.get(numberOfWiFiPointsFound).SSID + ";"
-									+ scannedWiFiResults.get(numberOfWiFiPointsFound).BSSID + ";"
-									+ scannedWiFiResults.get(numberOfWiFiPointsFound).level;
+							 String wiFiAccessPoint =  scannedWiFiResults.get(numberOfWiFiPointsFound).BSSID;
+							// + "  "  +  scannedWiFiResults.get(numberOfWiFiPointsFound).capabilities;
+//							String wiFiAccessPoint = scannedWiFiResults.get(numberOfWiFiPointsFound).SSID + ";"
+//									+ scannedWiFiResults.get(numberOfWiFiPointsFound).BSSID + ";"
+//									+ scannedWiFiResults.get(numberOfWiFiPointsFound).level;
 
 							if (!myList.contains(wiFiAccessPoint)) {
 								HashMap<String, String> item = new HashMap<String, String>();
 								item.put(WIFI_ITEM_KEY, wiFiAccessPoint);
 								arraylistForWiFiResult.add(item);
+								wiFiAccessPoint += "," + scannedWiFiResults.get(numberOfWiFiPointsFound).level;
+								combinedScannedWiFiResult += wiFiAccessPoint + ";"; 
 							}
 							numberOfWiFiPointsFound--;
 						}
@@ -450,9 +489,11 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			TextView textviewWiFi = (TextView) findViewById(R.id.textView_WiFi_status);
 			textviewWiFi.clearAnimation();
 			textviewWiFi.setText("Updated");
-
 			ImageView imageViewWiFi = (ImageView) findViewById(R.id.progressFinishedIcon_WiFi);
 			imageViewWiFi.setVisibility(View.VISIBLE);
+			asyncTasksProgress++;
+			
+			SensorResult.put("wifi", combinedScannedWiFiResult);
 
 			// if (dialog.isShowing()) {
 			// dialog.dismiss();
@@ -464,13 +505,13 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 		private ProgressDialog dialog;
 		private Context context; // application context.
+		private String combinedRecordedNoiseResult = "";
 
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
 		// 00 means exactly two decimal places; # means "optional" digit and it
 		// will drop trailing zeroes
 		// Double count = .0;
 		// Double sum = .0;
-		List<Double> soundLevelList = new ArrayList<Double>();
 
 		public DetectBackgroundNoise(Activity activity) {
 			context = activity;
@@ -499,8 +540,9 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 				counts--;
 				double amp = mSensor.getAmplitude();
 				amp = Double.parseDouble(decimalFormat.format(amp));
+				
+				combinedRecordedNoiseResult += String.valueOf(amp) + ";";
 
-				soundLevelList.add(amp);
 				HashMap<String, String> item = new HashMap<String, String>();
 				item.put(NOISE_ITEM_KEY, String.valueOf(amp));
 				arraylistForNoiseResult.add(item);
@@ -514,9 +556,10 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 					e.printStackTrace();
 				}
 			}
-			arraylistForNoiseResult.remove(0); // drop the first one whose
-												// result is always zero for
-												// some reasons
+			// drop the first one whose result is always zero for some reasons
+			arraylistForNoiseResult.remove(0); 
+			combinedRecordedNoiseResult = combinedRecordedNoiseResult.substring(combinedRecordedNoiseResult.indexOf(";")+1);
+			
 			return 0;
 
 		}
@@ -537,10 +580,68 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			textviewNoise.setText("Updated");
 			ImageView imageViewNoise = (ImageView) findViewById(R.id.progressFinishedIcon_Noise);
 			imageViewNoise.setVisibility(View.VISIBLE);
+			asyncTasksProgress++;
+			
+			SensorResult.put("noise", combinedRecordedNoiseResult);
 
 			// if (dialog.isShowing()) {
 			// dialog.dismiss();
 			// }
+		}
+	}
+	
+	private class CheckUpdatingProgress extends AsyncTask<Integer, Void, Integer> {
+
+//		private ImageView imageViewWiFi = (ImageView) findViewById(R.id.progressFinishedIcon_WiFi);
+//		private ImageView imageViewLocation = (ImageView) findViewById(R.id.progressFinishedIcon_Location);
+//		private ImageView imageViewNoise = (ImageView) findViewById(R.id.progressFinishedIcon_Noise);
+//		private TextView textviewWiFi = (TextView) findViewById(R.id.textView_WiFi_status);
+//		private TextView textviewLocation = (TextView) findViewById(R.id.textView_Location_status);
+//		private TextView textviewNoise = (TextView) findViewById(R.id.textView_Noise_status);
+		
+		@Override
+		protected Integer doInBackground(Integer... totalCounts) {
+
+			int counts = totalCounts[0];
+
+			
+			while (true){
+				Log.i("checkValue",Integer.toString(asyncTasksProgress));
+				if(asyncTasksProgress==3) {
+					break;
+				}else{
+					try {
+						Thread.sleep(500);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+//				if(imageViewWiFi.getVisibility() == View.VISIBLE && 
+//						imageViewLocation.getVisibility() == View.VISIBLE && 
+//						imageViewNoise.getVisibility() == View.VISIBLE) {
+//					break;
+//				}else{
+//					try {
+//						Thread.sleep(3000);
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//				}
+			}
+			Log.i("checked", "done");
+
+			return 0;
+
+		}
+
+		@Override
+		protected void onPostExecute(Integer counts) {
+
+			imageViewReportButton.setVisibility(View.VISIBLE);
+			imageViewReportButton.startAnimation((Animation) AnimationUtils.loadAnimation(SensorDataCollector.this, R.anim.fade_in));
+			textViewReportButton.setVisibility(View.VISIBLE);
+			textViewReportButton.startAnimation((Animation) AnimationUtils.loadAnimation(SensorDataCollector.this, R.anim.fade_in));
+
 		}
 	}
 
