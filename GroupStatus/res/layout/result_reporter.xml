@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sensor_data_collector"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:contentDescription="@string/desc" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/black"
+        android:src="@drawable/application_background" >
+    </ImageView>
+
+    <!-- Upload -->
+
+    <TextView
+        android:id="@+id/space_Upload"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:text=" " />
+
+    <ImageView
+        android:id="@+id/area_Button_Upload"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/space_Upload"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:alpha=".85"
+        android:background="@android:color/white" />
+
+    <TextView
+        android:id="@+id/textView_ReportButton_Upload"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/area_Button_Upload"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Report"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_Upload"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView_ReportButton_Upload"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+    
+    <ImageView
+        android:id="@+id/checked_Upload"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignTop="@+id/textView_ReportButton_Upload"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:src="@drawable/checked"
+        android:visibility="invisible" />
+
+</RelativeLayout>

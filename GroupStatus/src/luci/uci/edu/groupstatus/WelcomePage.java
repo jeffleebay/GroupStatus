@@ -102,8 +102,8 @@ public class WelcomePage extends Activity {
 //	            	Toast toast = Toast.makeText(getApplicationContext(),text, Toast.LENGTH_LONG);
 //	            	toast.setGravity(Gravity.CENTER, 0, 0);
 //	            	toast.show();
-            	LogInToServer task = new LogInToServer(WelcomePage.this);
-            	task.execute(userProfile); //http://qs4task.appspot.com/socialanalysistaskqs?taskid=1001 //http://myfooserver.appspot.com/
+            	LogInToServer logInToServer = new LogInToServer(WelcomePage.this);
+            	logInToServer.execute(userProfile); //http://qs4task.appspot.com/socialanalysistaskqs?taskid=1001 //http://myfooserver.appspot.com/
             	}            	
             }
         });
@@ -140,6 +140,7 @@ public class WelcomePage extends Activity {
 		        String userPW = userProfile.toString().substring(userProfile.toString().indexOf(';')+1); 	        
 		        HttpPost httppost = new HttpPost("http://group-status-376.appspot.com/groupstatus_server");		        	        
 		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		        nameValuePairs.add(new BasicNameValuePair("function", "login"));
 		        nameValuePairs.add(new BasicNameValuePair("userID", userID));
 		        nameValuePairs.add(new BasicNameValuePair("userPW", userPW));
 		        

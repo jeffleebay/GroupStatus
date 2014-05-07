@@ -6,16 +6,28 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Settings;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -31,6 +43,7 @@ import android.media.MediaRecorder;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,11 +62,11 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	Boolean DEVELOPER_MODE = false;
 	int asyncTasksProgress = 0;
 	HashMap<String, String> SensorResult = new HashMap<String, String>();
-//	ArrayList<HashMap<String, String>> SensorResult = new ArrayList<HashMap<String, String>>();
-	
+	String keys[] = { "status", "wifi", "noise", "location", "address" };
 
 	// Vars for WiFi
 	WifiManager wifi;
+	BroadcastReceiver wifiBroadcastReceiver;
 	ListView listViewForWiFiResults;
 	ArrayList<HashMap<String, String>> arraylistForWiFiResult = new ArrayList<HashMap<String, String>>();
 	SimpleAdapter adapterForWiFiResult;
@@ -160,6 +173,8 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			String status = getIntent().getExtras().getString("status");
 			textView.setText(status);	
 			SensorResult.put("status", status);
+		}else{
+			SensorResult.put(keys[0], "Coding in Vista del Campo");
 		}
 
 		// Vars for buttons
@@ -198,13 +213,15 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 				new String[] { WIFI_ITEM_KEY }, new int[] { android.R.id.text1 });
 		listViewForWiFiResults.setAdapter(this.adapterForWiFiResult);
 
-		registerReceiver(new BroadcastReceiver() {
+		wifiBroadcastReceiver = new BroadcastReceiver() 
+		{
 			@Override
 			public void onReceive(Context c, Intent intent) {
 				scannedWiFiResults = wifi.getScanResults();
 				numberOfWiFiPointsFound = scannedWiFiResults.size();
 			}
-		}, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+		}; 
+		registerReceiver(wifiBroadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
 		// Vars for Noise
 		listViewForNoiseResult = (ListView) findViewById(R.id.list_Noise);
@@ -272,25 +289,34 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	@Override
 	public void onPause() {
 		super.onPause();
-		//        locationManager.removeUpdates(locationListener);
 	}
 
-	//reactivates listener when app is resumed
 	@Override
 	public void onResume() {
 		super.onResume();
 	}
 	
+	@Override
+	public void onStop() {
+		unregisterReceiver(wifiBroadcastReceiver);
+		super.onStop();
+	}
+	
 	public void onClick(View view) {
-
-		String keys[] = { "status", "wifi", "noise", "location", "address" };
 
 		switch (view.getId()) {
 		case R.id.area_Button:
-			for (int i = 0; i < keys.length; i++)
-				Log.i(keys[i], SensorResult.get(keys[i]));
+//			Intent intent = new Intent(SensorDataCollector.this, ResultReporter.class);
+//            intent.putExtra("results", SensorResult);
+//            startActivity(intent);
+			UploadToServer uploadToServer = new UploadToServer(SensorDataCollector.this);
+			uploadToServer.execute(" ");	
+			
+			break;
+
 		}
 	}
+
 	
 	public void TurnOffDeveloperMode(){
 //		TextView tv;
@@ -407,16 +433,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		}
 
 		protected void onPreExecute() {
-
 			Log.i("Wifi", "start");
-
-			// this.dialog.setMessage("Scanning WiFi Networks");
-			// this.dialog.show();
-			// try {
-			// Thread.sleep(100);
-			// } catch (InterruptedException e) {
-			// e.printStackTrace();
-			// }
 		}
 
 		@Override
@@ -495,9 +512,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			
 			SensorResult.put("wifi", combinedScannedWiFiResult);
 
-			// if (dialog.isShowing()) {
-			// dialog.dismiss();
-			// }
 		}
 	}
 
@@ -510,8 +524,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		DecimalFormat decimalFormat = new DecimalFormat("#.00");
 		// 00 means exactly two decimal places; # means "optional" digit and it
 		// will drop trailing zeroes
-		// Double count = .0;
-		// Double sum = .0;
 
 		public DetectBackgroundNoise(Activity activity) {
 			context = activity;
@@ -521,14 +533,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		protected void onPreExecute() {
 			mSensor.start();
 			Log.i("Noise", "start");
-
-			// this.dialog.setMessage("Scanning WiFi Networks");
-			// this.dialog.show();
-			// try {
-			// Thread.sleep(100);
-			// } catch (InterruptedException e) {
-			// e.printStackTrace();
-			// }
 		}
 
 		@Override
@@ -546,9 +550,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 				HashMap<String, String> item = new HashMap<String, String>();
 				item.put(NOISE_ITEM_KEY, String.valueOf(amp));
 				arraylistForNoiseResult.add(item);
-
-				// count++;
-				// sum += amp;
 
 				try {
 					Thread.sleep(NOISE_POLL_INTERVAL);
@@ -584,21 +585,11 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			
 			SensorResult.put("noise", combinedRecordedNoiseResult);
 
-			// if (dialog.isShowing()) {
-			// dialog.dismiss();
-			// }
 		}
 	}
 	
 	private class CheckUpdatingProgress extends AsyncTask<Integer, Void, Integer> {
 
-//		private ImageView imageViewWiFi = (ImageView) findViewById(R.id.progressFinishedIcon_WiFi);
-//		private ImageView imageViewLocation = (ImageView) findViewById(R.id.progressFinishedIcon_Location);
-//		private ImageView imageViewNoise = (ImageView) findViewById(R.id.progressFinishedIcon_Noise);
-//		private TextView textviewWiFi = (TextView) findViewById(R.id.textView_WiFi_status);
-//		private TextView textviewLocation = (TextView) findViewById(R.id.textView_Location_status);
-//		private TextView textviewNoise = (TextView) findViewById(R.id.textView_Noise_status);
-		
 		@Override
 		protected Integer doInBackground(Integer... totalCounts) {
 
@@ -616,17 +607,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 						e.printStackTrace();
 					}
 				}
-//				if(imageViewWiFi.getVisibility() == View.VISIBLE && 
-//						imageViewLocation.getVisibility() == View.VISIBLE && 
-//						imageViewNoise.getVisibility() == View.VISIBLE) {
-//					break;
-//				}else{
-//					try {
-//						Thread.sleep(3000);
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//				}
 			}
 			Log.i("checked", "done");
 
@@ -639,10 +619,115 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 			imageViewReportButton.setVisibility(View.VISIBLE);
 			imageViewReportButton.startAnimation((Animation) AnimationUtils.loadAnimation(SensorDataCollector.this, R.anim.fade_in));
+			try {
+				Thread.sleep(500);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			textViewReportButton.setVisibility(View.VISIBLE);
 			textViewReportButton.startAnimation((Animation) AnimationUtils.loadAnimation(SensorDataCollector.this, R.anim.fade_in));
 
 		}
 	}
+	
+	private class UploadToServer extends AsyncTask<String, Void, String> {
+		
+//	    private ProgressDialog dialog;
+        private Context context; // application context.
+        private ProgressBar progressBar_spinner_Upload;
+
+        
+		public UploadToServer(Activity activity) {
+            context = activity;
+//            dialog = new ProgressDialog(context);
+        }
+	    
+	    protected void onPreExecute() {
+//	        this.dialog.setMessage("Connecting to the server");
+//	        this.dialog.show();
+//	        try {
+//				Thread.sleep(100);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//	        
+			progressBar_spinner_Upload = (ProgressBar) findViewById(R.id.progressBar_spinner_Upload);
+			progressBar_spinner_Upload.setVisibility(View.VISIBLE);
+	    }
+		
+	    @Override
+	    protected String doInBackground(String... userProfiles) {
+	    	String response = "";
+	    	for (String userProfile : userProfiles) {
+		        DefaultHttpClient client = new DefaultHttpClient();
+		        
+		        // Add sensor data       
+		        HttpPost httppost = new HttpPost("http://group-status-376.appspot.com/groupstatus_server");		        	        
+		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		        
+		        nameValuePairs.add(new BasicNameValuePair("function", "upload"));
+		        for (int i = 0; i < keys.length; i++)
+		        	nameValuePairs.add(new BasicNameValuePair(keys[i], SensorResult.get(keys[i])));
+		        
+		        try {
+					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+				} catch (UnsupportedEncodingException e1) {
+					e1.printStackTrace();
+				}
+		        
+		        try {
+		          HttpResponse execute = client.execute(httppost);
+		          InputStream content = execute.getEntity().getContent();
+	
+		          BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+		          String s = "";
+		          while ((s = buffer.readLine()) != null) {
+		            response += s;
+		          }
+	
+		        } catch (Exception e) {
+		          e.printStackTrace();
+		        }
+		    }
+			return response;
+	    }
+	    
+
+		@Override
+	    protected void onPostExecute(String result) {
+	    	
+//	    	if (dialog.isShowing()) {
+//	            dialog.dismiss();
+//	        }
+	    	
+	    	if(result.endsWith("success")){	    			    	
+//	    		final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded", Toast.LENGTH_SHORT);
+//		    	toast.setGravity(Gravity.CENTER, 0, 100);
+//		    	toast.show();
+//		    	
+//		    	//The count down timer is used for controlling display time more specifically -> for aesthetics 
+//		    	
+//		    	new CountDownTimer(50, 500) {						//duration = 100
+//			        public void onTick(long millisUntilFinished) {
+//			            toast.show();
+//			        }
+//			        public void onFinish() {
+//			            toast.cancel();
+//			        }
+//			    }.start();
+			    
+	    		progressBar_spinner_Upload.setVisibility(View.INVISIBLE);
+			    ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
+			    imageView_checked_Upload.setVisibility(View.VISIBLE);
+			    
+		    	
+	    	}else{
+	    		Toast toast = Toast.makeText(getApplicationContext(),"Upload error. Invalid username or password.", Toast.LENGTH_SHORT);
+	    		toast.setGravity(Gravity.CENTER, 0, 100);
+		    	toast.show();
+	    	}
+		    	
+	    }
+	  }	
 
 }

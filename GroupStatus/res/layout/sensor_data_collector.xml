@@ -36,7 +36,7 @@
                 android:adjustViewBounds="true"
                 android:alpha=".8"
                 android:background="@android:color/white" />
-            
+
             <ImageView
                 android:id="@+id/area_shadow_buttom_WiFi"
                 android:layout_width="255dp"
@@ -53,9 +53,9 @@
                 android:layout_width="3dp"
                 android:layout_height="67dp"
                 android:layout_alignTop="@+id/area_WiFi"
+                android:layout_marginLeft="3dp"
                 android:layout_marginTop="6dp"
                 android:layout_toRightOf="@+id/area_WiFi"
-                android:layout_marginLeft="3dp"
                 android:adjustViewBounds="true"
                 android:alpha=".5"
                 android:background="@android:color/black" />
@@ -165,9 +165,9 @@
                 android:layout_width="3dp"
                 android:layout_height="67dp"
                 android:layout_alignTop="@+id/area_Noise"
+                android:layout_marginLeft="3dp"
                 android:layout_marginTop="6dp"
                 android:layout_toRightOf="@+id/area_Noise"
-                android:layout_marginLeft="3dp"
                 android:adjustViewBounds="true"
                 android:alpha=".5"
                 android:background="@android:color/black" />
@@ -261,7 +261,7 @@
                 android:alpha=".8"
                 android:background="@android:color/white" />
 
-			<ImageView
+            <ImageView
                 android:id="@+id/area_shadow_buttom_Location"
                 android:layout_width="255dp"
                 android:layout_height="3dp"
@@ -277,9 +277,9 @@
                 android:layout_width="3dp"
                 android:layout_height="67dp"
                 android:layout_alignTop="@+id/area_Location"
+                android:layout_marginLeft="3dp"
                 android:layout_marginTop="6dp"
                 android:layout_toRightOf="@+id/area_Location"
-                android:layout_marginLeft="3dp"
                 android:adjustViewBounds="true"
                 android:alpha=".5"
                 android:background="@android:color/black" />
@@ -360,7 +360,7 @@
                     android:src="@drawable/checked"
                     android:visibility="invisible" />
             </LinearLayout>
-            
+
             <!-- Button -->
 
             <ImageView
@@ -370,7 +370,7 @@
                 android:layout_below="@+id/space_Button"
                 android:layout_centerHorizontal="true"
                 android:adjustViewBounds="true"
-                android:alpha=".8"
+                android:alpha=".85"
                 android:background="@android:color/white" />
 
             <TextView
@@ -379,17 +379,39 @@
                 android:layout_height="40dp"
                 android:layout_below="@+id/linearLayout_progress_Location"
                 android:text=" " />
-            
+
             <TextView
                 android:id="@+id/textView_ReportButton"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_below="@+id/space_Button"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:textColor="@android:color/black"
+                android:layout_marginTop="7dp"
+                android:text="Report  "
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Report" />
+                android:textColor="@android:color/black" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_spinner_Upload"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textView_ReportButton"
+                android:layout_alignLeft="@+id/textView_ReportButton"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="165dp"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/imageView_checked_Upload"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignTop="@+id/textView_ReportButton"
+                android:layout_alignLeft="@+id/textView_ReportButton"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="165dp"
+                android:src="@drawable/checked"
+                android:visibility="invisible" />
 
             <!-- Status and location -->
 
@@ -402,7 +424,7 @@
                 android:adjustViewBounds="true"
                 android:alpha=".8"
                 android:background="@android:color/white" />
-            
+
             <ImageView
                 android:id="@+id/area_shadow_buttom_SnL"
                 android:layout_width="255dp"
@@ -419,12 +441,12 @@
                 android:layout_width="3dp"
                 android:layout_height="77dp"
                 android:layout_alignTop="@+id/area_SnL"
+                android:layout_marginLeft="3dp"
                 android:layout_marginTop="6dp"
                 android:layout_toRightOf="@+id/area_SnL"
-                android:layout_marginLeft="3dp"
                 android:adjustViewBounds="true"
                 android:alpha=".5"
-                android:background="@android:color/black" />			
+                android:background="@android:color/black" />
 
             <TextView
                 android:id="@+id/space_SnL"
@@ -497,11 +519,11 @@
                 android:layout_width="260dp"
                 android:layout_height="260dp"
                 android:layout_below="@+id/space_ListView"
-				android:layout_centerHorizontal="true"
+                android:layout_centerHorizontal="true"
                 android:adjustViewBounds="true"
                 android:alpha=".8"
                 android:background="@android:color/white" />
-            
+
             <ImageView
                 android:id="@+id/area_shadow_buttom_ListView"
                 android:layout_width="255dp"
@@ -518,13 +540,12 @@
                 android:layout_width="3dp"
                 android:layout_height="257dp"
                 android:layout_alignTop="@+id/area_ListView"
+                android:layout_marginLeft="3dp"
                 android:layout_marginTop="6dp"
                 android:layout_toRightOf="@+id/area_ListView"
-                android:layout_marginLeft="3dp"
                 android:adjustViewBounds="true"
                 android:alpha=".5"
                 android:background="@android:color/black" />
-
 
             <TextView
                 android:id="@+id/space_ListView"
@@ -569,8 +590,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
 
-               <!-- android:stackFromBottom="true"
-                    android:transcriptMode="alwaysScroll"-->
+                        <!--
+                    android:stackFromBottom="true"
+                    android:transcriptMode="alwaysScroll"
+                        -->
 
                     </ListView>
                 </LinearLayout>
@@ -601,19 +624,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
 
-				<!--android:stackFromBottom="true"
-                    android:transcriptMode="alwaysScroll"-->
+                        <!--
+                    android:stackFromBottom="true"
+                    android:transcriptMode="alwaysScroll"
+                        -->
                     </ListView>
                 </LinearLayout>
             </LinearLayout>
-            
+
             <TextView
                 android:id="@+id/space_ButtomOfThePage"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_below="@+id/area_ListView"
                 android:text=" " />
-
         </RelativeLayout>
     </ScrollView>
 
