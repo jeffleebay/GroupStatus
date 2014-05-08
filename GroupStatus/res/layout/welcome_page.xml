@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         android:background="@android:color/black"
-        android:src="@drawable/application_background" >
+        android:src="@drawable/welcome_background_up" >
 
         <!--
 	    android:adjustViewBounds="false"
@@ -60,7 +60,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="ID"
-            android:text="user001"
             android:inputType="textPersonName"
             android:maxLength="10"
             android:textColorHint="#444444" />
@@ -70,7 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="PIN"
-            android:text="1234"
             android:inputType="numberPassword"
             android:maxLength="4"
             android:textColorHint="#444444" />

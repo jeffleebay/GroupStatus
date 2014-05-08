@@ -47,7 +47,7 @@ public final class R {
         public static final int TextViewTheLocation=0x7f09000e;
         public static final int TextViewWiFi=0x7f090008;
         public static final int TextView_TheLocation=0x7f090052;
-        public static final int action_FrndMngr=0x7f090062;
+        public static final int action_FrndMngr=0x7f090063;
         public static final int action_settings=0x7f090061;
         public static final int area_Button=0x7f090045;
         public static final int area_Button_Upload=0x7f090020;
@@ -94,6 +94,7 @@ public final class R {
         public static final int listWiFi=0x7f090013;
         public static final int list_Noise=0x7f090059;
         public static final int list_WiFi=0x7f090058;
+        public static final int log_out=0x7f090062;
         public static final int loginArea=0x7f09005d;
         public static final int loginTextView=0x7f090060;
         public static final int progressBarWiFi=0x7f090009;
@@ -161,6 +162,7 @@ public final class R {
         public static final int defaul_Status=0x7f060005;
         public static final int desc=0x7f060007;
         public static final int hello_world=0x7f060002;
+        public static final int log_out=0x7f060008;
         public static final int send=0x7f060003;
     }
     public static final class style {

@@ -8,7 +8,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -174,7 +176,6 @@ public class StatusReporter extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return true;
 	}
@@ -182,12 +183,14 @@ public class StatusReporter extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_FrndMngr:
-			Intent intentI = new Intent(this, FriendManager.class);
+		case R.id.log_out:
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(StatusReporter.this).edit();
+			edit.clear();
+			edit.apply();
+			Intent intentI = new Intent(this, WelcomePage.class);
 			startActivity(intentI);
 			break;
 		}
-
 		return true;
 	}
 

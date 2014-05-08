@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences.Editor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -44,6 +46,8 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -730,4 +734,24 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	    }
 	  }	
 
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.log_out:
+			Editor edit = PreferenceManager.getDefaultSharedPreferences(SensorDataCollector.this).edit();
+			edit.clear();
+			edit.apply();
+			Intent intentI = new Intent(this, WelcomePage.class);
+			startActivity(intentI);
+			break;
+		}
+		return true;
+	}
 }

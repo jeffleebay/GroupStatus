@@ -9,6 +9,7 @@
     <string name="defaul_Status">UserStatus</string>
     <string name="action_FrndMngr">Friends</string>
     <string name="desc">Welcome to Group Status</string>
+    <string name="log_out">Log out</string>
 
 
 </resources>

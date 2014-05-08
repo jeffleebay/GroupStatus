@@ -22,11 +22,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -50,6 +53,19 @@ public class WelcomePage extends Activity {
 			showSettingsAlert(WelcomePage.this);
 		}
 		
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		String userID = settings.getString("userIDforGroupStatus", "n/a");
+		String userPW = settings.getString("userPWforGroupStatus", "n/a");
+		
+		if(!userID.equals("n/a") && !userPW.equals("n/a")){
+			EditText userID_EditText = (EditText)findViewById(R.id.userID);
+        	EditText userPW_EditText = (EditText)findViewById(R.id.userPW);
+        	userID_EditText.setText(userID);
+        	userPW_EditText.setText(userPW);
+        	TextView  textView  = (TextView) findViewById(R.id.loginTextView);
+        	textView.performClick();
+		}
+
 	}
 	
 	public void showSettingsAlert(final Context mContext) {
@@ -113,6 +129,8 @@ public class WelcomePage extends Activity {
 	
 	    private ProgressDialog dialog;
         private Context context; // application context.
+        String userID = "";
+        String userPW = "";
         
 		public LogInToServer(Activity activity) {
             context = activity;
@@ -136,8 +154,8 @@ public class WelcomePage extends Activity {
 		        DefaultHttpClient client = new DefaultHttpClient();
 		        
 		        // Add user data
-		        String userID = userProfile.toString().substring(0, userProfile.toString().indexOf(';')); 
-		        String userPW = userProfile.toString().substring(userProfile.toString().indexOf(';')+1); 	        
+		        userID = userProfile.toString().substring(0, userProfile.toString().indexOf(';')); 
+		        userPW = userProfile.toString().substring(userProfile.toString().indexOf(';')+1); 	        
 		        HttpPost httppost = new HttpPost("http://group-status-376.appspot.com/groupstatus_server");		        	        
 		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		        nameValuePairs.add(new BasicNameValuePair("function", "login"));
@@ -191,6 +209,13 @@ public class WelcomePage extends Activity {
 			        }
 			
 			    }.start();
+			    
+
+			    Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
+			    edit.putString("userIDforGroupStatus", userID);
+			    edit.putString("userPWforGroupStatus", userPW);
+			    edit.clear(); 																 //I know this is redundant... 
+			    edit.apply();
 		    	
 		    	Intent i = new Intent(WelcomePage.this, StatusReporter.class);		    	
 		    	startActivity(i); 
