@@ -47,6 +47,9 @@ public final class R {
         public static final int TextViewTheLocation=0x7f09000e;
         public static final int TextViewWiFi=0x7f090008;
         public static final int TextView_TheLocation=0x7f090052;
+        public static final int action_10=0x7f090065;
+        public static final int action_30=0x7f090066;
+        public static final int action_5=0x7f090064;
         public static final int action_FrndMngr=0x7f090063;
         public static final int action_settings=0x7f090061;
         public static final int area_Button=0x7f090045;
@@ -153,6 +156,7 @@ public final class R {
     public static final class menu {
         public static final int main=0x7f080000;
         public static final int main_menu=0x7f080001;
+        public static final int notification=0x7f080002;
     }
     public static final class string {
         public static final int action_FrndMngr=0x7f060006;

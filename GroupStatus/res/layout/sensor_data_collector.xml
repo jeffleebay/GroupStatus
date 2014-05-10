@@ -387,7 +387,7 @@
                 android:layout_below="@+id/space_Button"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="7dp"
-                android:text="Report  "
+                android:text="Upload  "
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/black" />
 

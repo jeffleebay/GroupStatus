@@ -636,25 +636,25 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	
 	private class UploadToServer extends AsyncTask<String, Void, String> {
 		
-//	    private ProgressDialog dialog;
+	    private ProgressDialog dialog;
         private Context context; // application context.
         private ProgressBar progressBar_spinner_Upload;
 
         
 		public UploadToServer(Activity activity) {
             context = activity;
-//            dialog = new ProgressDialog(context);
+            dialog = new ProgressDialog(context);
         }
 	    
 	    protected void onPreExecute() {
-//	        this.dialog.setMessage("Connecting to the server");
-//	        this.dialog.show();
-//	        try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//	        
+	        this.dialog.setMessage("Uploading to the server");
+	        this.dialog.show();
+	        try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	        
 			progressBar_spinner_Upload = (ProgressBar) findViewById(R.id.progressBar_spinner_Upload);
 			progressBar_spinner_Upload.setVisibility(View.VISIBLE);
 	    }
@@ -700,9 +700,9 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		@Override
 	    protected void onPostExecute(String result) {
 	    	
-//	    	if (dialog.isShowing()) {
-//	            dialog.dismiss();
-//	        }
+	    	if (dialog.isShowing()) {
+	            dialog.dismiss();
+	        }
 	    	
 	    	if(result.endsWith("success")){	    			    	
 //	    		final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded", Toast.LENGTH_SHORT);
