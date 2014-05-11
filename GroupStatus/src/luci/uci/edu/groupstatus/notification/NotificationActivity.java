@@ -1,8 +1,12 @@
-package luci.uci.edu.groupstatus;
+package luci.uci.edu.groupstatus.notification;
 
 import java.util.Calendar;
 
-import luci.uci.edu.groupstatus.NotificationPublisher;
+import luci.uci.edu.groupstatus.R;
+import luci.uci.edu.groupstatus.R.id;
+import luci.uci.edu.groupstatus.R.layout;
+import luci.uci.edu.groupstatus.R.menu;
+import luci.uci.edu.groupstatus.notification.NotificationPublisher;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;

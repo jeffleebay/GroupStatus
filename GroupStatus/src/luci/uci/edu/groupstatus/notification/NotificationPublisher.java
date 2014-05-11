@@ -1,4 +1,7 @@
-package luci.uci.edu.groupstatus;
+package luci.uci.edu.groupstatus.notification;
+import luci.uci.edu.groupstatus.R;
+import luci.uci.edu.groupstatus.WelcomePage;
+import luci.uci.edu.groupstatus.R.drawable;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

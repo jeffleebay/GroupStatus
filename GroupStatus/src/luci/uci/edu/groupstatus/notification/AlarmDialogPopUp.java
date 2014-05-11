@@ -1,5 +1,6 @@
-package luci.uci.edu.groupstatus;
+package luci.uci.edu.groupstatus.notification;
 
+import luci.uci.edu.groupstatus.WelcomePage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
