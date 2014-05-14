@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
  
 public class WelcomePage extends Activity {
@@ -44,7 +45,8 @@ public class WelcomePage extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome_page);
 		
-		addListenerOnText();
+		addListenerOnTextView();
+		addListenerOnEditText();
 		
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -99,7 +101,7 @@ public class WelcomePage extends Activity {
 		alertDialog.show();
 	}
 
-	public void addListenerOnText() {
+	public void addListenerOnTextView() {
 		 
 		final TextView  textView  = (TextView) findViewById(R.id.loginTextView);
 		textView.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +125,27 @@ public class WelcomePage extends Activity {
             	}            	
             }
         });
+	}
+	
+	public void addListenerOnEditText(){
+		
+		final TextView  textView  = (TextView) findViewById(R.id.loginTextView);
+		final EditText editText =(EditText)findViewById(R.id.userPW);
+		editText.setOnKeyListener(new View.OnKeyListener() {
+		    @Override
+		    public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+		    	if (KeyEvent.KEYCODE_ENTER == keyCode) { 
+		            
+		        	textView.performClick();
+		        	
+		            return true; // indicate that we handled event, won't propagate it
+		        }
+		        return false; // when we don't handle other keys, propagate event further
+		    }
+		});
+
+
 	}
 	
 	private class LogInToServer extends AsyncTask<String, Void, String> {
@@ -193,7 +216,7 @@ public class WelcomePage extends Activity {
 	            dialog.dismiss();
 	        }
 	    	
-	    	if(result.endsWith("success")){	    			    	
+	    	if(result.startsWith("successfully logged in")){	    			    	
 	    		final Toast toast = Toast.makeText(getApplicationContext(),"Successfully logged in", Toast.LENGTH_SHORT);
 		    	toast.setGravity(Gravity.CENTER, 0, 100);
 		    	toast.show();

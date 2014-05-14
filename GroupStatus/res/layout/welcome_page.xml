@@ -60,8 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="ID"
-            android:inputType="textPersonName"
-            android:maxLength="10"
+            android:inputType="numberPassword"
+            android:maxLength="4"
             android:textColorHint="#444444" />
 
         <EditText
