@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/welcomePage"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:contentDescription="@string/desc" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/black"
+        android:src="@drawable/welcome_background_up" >
+
+        <!--
+	    android:adjustViewBounds="false"
+	    android:scaleType="fitXY"         -->
+        <!--
+	    android:adjustViewBounds="true"
+	    delete -> android:scaleType="fitXY"         -->
+
+    </ImageView>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/linearLayoutForSetup" >
+        
+       	<ImageView
+	        android:id="@+id/setupArea"
+	        android:layout_width="170dp"
+	        android:layout_height="140dp"
+	        android:adjustViewBounds="true"
+	        android:alpha=".5"
+	        android:background="@android:color/white" >
+        
+    </ImageView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutForSetup"
+        android:layout_width="120dp"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" 
+        android:gravity="center_horizontal" >
+       	
+        <TextView
+            android:id="@+id/space"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text=" " />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Starting date:"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/startingDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="MM DD"
+            android:inputType="number"
+            android:maxLength="4"
+            android:textSize="18sp"
+            android:textColorHint="#444444" />
+        
+       	<TextView
+       	    android:id="@+id/space"
+       	    android:layout_width="wrap_content"
+       	    android:layout_height="18dp"
+       	    android:text=" " />
+
+       	<LinearLayout
+       	    android:id="@+id/linearLayoutForButtons"
+       	    android:layout_width="fill_parent"
+       	    android:layout_height="wrap_content"
+       	    android:gravity="center_vertical"
+       	    android:orientation="horizontal"
+       	    android:weightSum="3" >
+
+       	    <TextView
+       	        android:id="@+id/setupTextViewExp"
+       	        android:layout_width="0dp"
+       	        android:layout_height="wrap_content"
+       	        android:layout_weight="1"
+       	        android:clickable="true"
+       	        android:gravity="center"
+       	        android:onClick="onClick"
+       	        android:text="Exp"
+       	        android:textAppearance="?android:attr/textAppearanceMedium"
+       	        android:textSize="15sp" />
+
+       	    <TextView
+       	        android:id="@+id/setupTextViewTest"
+       	        android:layout_width="0dp"
+       	        android:layout_height="wrap_content"
+       	        android:layout_weight="1"
+       	        android:clickable="true"
+       	        android:gravity="center"
+       	        android:onClick="onClick"
+       	        android:text="Test"
+       	        android:textAppearance="?android:attr/textAppearanceMedium"
+       	        android:textSize="15sp" />
+
+       	    <TextView
+       	        android:id="@+id/setupTextViewSkip"
+       	        android:layout_width="0dp"
+       	        android:layout_height="wrap_content"
+       	        android:layout_weight="1"
+       	        android:clickable="true"
+       	        android:gravity="center"
+       	        android:onClick="onClick"
+       	        android:text="Skip"
+       	        android:textAppearance="?android:attr/textAppearanceMedium"
+       	        android:textSize="15sp" />
+
+       	</LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

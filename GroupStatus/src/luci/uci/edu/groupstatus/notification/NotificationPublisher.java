@@ -1,4 +1,6 @@
 package luci.uci.edu.groupstatus.notification;
+import java.util.Calendar;
+
 import luci.uci.edu.groupstatus.R;
 import luci.uci.edu.groupstatus.WelcomePage;
 import luci.uci.edu.groupstatus.R.drawable;
@@ -55,24 +57,30 @@ public class NotificationPublisher extends BroadcastReceiver {
 	 // Attach the intent to a pending intent
 	 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	 
+	 Calendar calendar = Calendar.getInstance();
+	 calendar.setTimeInMillis(System.currentTimeMillis());
 	 // Create the notification
-	 Notification notification = new Notification(R.drawable.ic_launcher, "Group Status", System.currentTimeMillis());
-	 notification.setLatestEventInfo(context, "Group Status", "Time to update your status",pendingIntent);
+	 Notification notification = new Notification(R.drawable.ic_launcher_notification, "Group Status", System.currentTimeMillis());
+	 notification.setLatestEventInfo(context, "Group Status", "Time to update your status!",pendingIntent);
 	 
+	 //only one notification in a minute at most
+	 int notifyID = calendar.get(Calendar.DAY_OF_YEAR)*1000+calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE);
 	 // Fire the notification
-	 notificationManager.notify(1, notification);
+	 notificationManager.notify(notifyID, notification);
+
+//the popup dialog is quite annoying
 	 
-	// Launch the alarm popup dialog
-     Intent alarmIntent = new Intent("android.intent.action.MAIN");
-
-     alarmIntent.setClass(context, AlarmDialogPopUp .class);
-     alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-     // Pass on the alarm ID as extra data
-     alarmIntent.putExtra("AlarmID", paramIntent.getIntExtra("AlarmID", -1));
-
-     // Start the popup activity
-     context.startActivity(alarmIntent);
+//	// Launch the alarm popup dialog
+//     Intent alarmIntent = new Intent("android.intent.action.MAIN");
+//
+//     alarmIntent.setClass(context, AlarmDialogPopUp .class);
+//     alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//     // Pass on the alarm ID as extra data
+//     alarmIntent.putExtra("AlarmID", paramIntent.getIntExtra("AlarmID", -1));
+//
+//     // Start the popup activity
+//     context.startActivity(alarmIntent);
 	 }
 
 }

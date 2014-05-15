@@ -673,6 +673,9 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		        for (int i = 0; i < keys.length; i++)
 		        	nameValuePairs.add(new BasicNameValuePair(keys[i], SensorResult.get(keys[i])));
 		        
+		        nameValuePairs.add(new BasicNameValuePair("userID", "7777"));
+		        nameValuePairs.add(new BasicNameValuePair("group", "6666"));
+		        
 		        try {
 					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				} catch (UnsupportedEncodingException e1) {

@@ -17,17 +17,68 @@ import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 public class NotificationActivity extends Activity{
 
 	 @Override
-	    protected void onCreate(Bundle savedInstanceState) {
-	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.result_reporter);
-	    }
-	 
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.result_reporter);
+
+		final ImageView button = (ImageView) findViewById(R.id.area_Button_Upload);
+		button.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				setNotificationsForTesting();
+//				setNotificationsForExperiment();
+			}
+		});
+
+	}
+
+	public void setNotificationsForExperiment() {
+
+		int experimentHour[] = { 9, 12, 15, 18, 21 };
+
+		getBaseContext();
+		AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(this, NotificationPublisher.class);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
+
+		for (int i = 0; i < 5; i++) {
+			calendar.set(Calendar.HOUR_OF_DAY, experimentHour[0]);
+			int currentTime = (int) System.currentTimeMillis();				//use the current time as id
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), currentTime, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+		}
+	}
+	
+	 public void setNotificationsForTesting(){
+		 
+		 int minutes=5;	//remind the user every 5 minutes
+		 
+		 getBaseContext();
+		 AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+		 Intent intent = new Intent(this, NotificationPublisher.class);
+		 Calendar calendar = Calendar.getInstance();
+		 calendar.setTimeInMillis(System.currentTimeMillis());
+
+		 for(int i=1;i<=5;i++){			 
+			 calendar.add(Calendar.MINUTE, minutes*i);
+			 int currentTime = (int) System.currentTimeMillis();				//use the current time as id
+			 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), currentTime, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+		 }
+	 }
+
 	 
 	    @Override
 	    public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,36 +104,15 @@ public class NotificationActivity extends Activity{
 	                return super.onOptionsItemSelected(item);
 	        }
 	    }
-	 
-//	    private void scheduleNotification(Notification notification, int delay) {
-//	 
-//	        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-//	        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
-//	        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-//	        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//	 
-//	        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-//	        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//	        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-//	    }
-//	 
-//	    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-//		private Notification getNotification(String content) {
-//	        Notification.Builder builder = new Notification.Builder(this);
-//	        builder.setContentTitle("Scheduled Notification");
-//	        builder.setContentText(content);
-//	        builder.setSmallIcon(R.drawable.ic_launcher);
-//	        return builder.build();
-//	    }
 	    
-	    private void createScheduledNotification(int days)
+	    private void createScheduledNotification(int seconds)
 	    {
 	    // Get new calendar object and set the date to now
 	    Calendar calendar = Calendar.getInstance();
 	    calendar.setTimeInMillis(System.currentTimeMillis());
 	    // Add defined amount of days to the date
 //	    calendar.add(Calendar.HOUR_OF_DAY, days * 24);
-	    calendar.add(Calendar.SECOND, days);
+	    calendar.add(Calendar.SECOND, seconds);
 
 	    // Retrieve alarm manager from the system
 	    AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(getBaseContext().ALARM_SERVICE);

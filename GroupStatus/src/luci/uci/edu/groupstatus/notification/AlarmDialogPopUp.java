@@ -40,7 +40,7 @@ public class AlarmDialogPopUp extends Activity {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 		alert.setTitle("Group Status");
-		alert.setMessage("Its time for the alarm ");
+		alert.setMessage("Its time to update your status ");
 		alert.setCancelable(true);
 
 		alert.setPositiveButton("Report", new DialogInterface.OnClickListener() {
