@@ -224,12 +224,15 @@ public class WelcomePage extends Activity {
 			if (dialog.isShowing()) {
 				dialog.dismiss();
 			}
+			
+			String group = result.substring(result.indexOf(":")+1);
 
 			if (result.startsWith("successfully logged in")) {
 
 				Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
 				edit.putString("userIDforGroupStatus", userID);
 				edit.putString("userPWforGroupStatus", userPW);
+				edit.putString("groupUserBelondedTo", group);
 				edit.clear(); //I know this is redundant... 
 				edit.apply();
 
