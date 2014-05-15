@@ -1,6 +1,7 @@
 package luci.uci.edu.groupstatus;
 
 import SoundMeter.SoundMeter;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -19,6 +20,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +37,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.location.Address;
 import android.location.Geocoder;
@@ -44,6 +47,7 @@ import android.location.LocationManager;
 import android.media.MediaRecorder;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -66,7 +70,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	Boolean DEVELOPER_MODE = false;
 	int asyncTasksProgress = 0;
 	HashMap<String, String> SensorResult = new HashMap<String, String>();
-	String keys[] = { "status", "wifi", "noise", "location", "address" };
+	String keys[] = { "status", "wifiList", "noiseLevel", "location", "address" };
 
 	// Vars for WiFi
 	WifiManager wifi;
@@ -89,7 +93,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		public void run() {
 			if (mProgressStatusWiFi < 80) {
 				mProgressStatusWiFi = mProgressStatusWiFi + progressValueWiFi / 2; //divided by 2 for smoothness
-				Log.i("WiFi", Integer.toString(mProgressStatusWiFi) + "%");
+//				Log.i("WiFi", Integer.toString(mProgressStatusWiFi) + "%");
 
 				mProgressWiFi.setProgress(mProgressStatusWiFi > 100 ? 100 : mProgressStatusWiFi);
 				mHandlerWiFi.postDelayed(updateProgressBarWiFi, WIFI_POLL_INTERVAL / 2);
@@ -121,7 +125,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		public void run() {
 			if (mProgressStatusNoise < 80) {
 				mProgressStatusNoise = mProgressStatusNoise + progressValueNoise;
-				Log.i("Noise", Integer.toString(mProgressStatusNoise) + "%");
+//				Log.i("Noise", Integer.toString(mProgressStatusNoise) + "%");
 
 				mProgressNoise.setProgress(mProgressStatusNoise > 100 ? 100 : mProgressStatusNoise);
 				mHandlerNoise.postDelayed(updateProgressBarNoise, NOISE_POLL_INTERVAL);
@@ -148,7 +152,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		public void run() {
 			if (mProgressStatusLocation < 80) {
 				mProgressStatusLocation = mProgressStatusLocation + progressValueLocation / 2; //divided by 2 for smoothness
-				Log.i("Location", Integer.toString(mProgressStatusLocation) + "%");
+//				Log.i("Location", Integer.toString(mProgressStatusLocation) + "%");
 
 				mProgressLocation.setProgress(mProgressStatusLocation > 100 ? 100 : mProgressStatusLocation);
 				mHandlerLocation.postDelayed(updateProgressBarLocation, 500 / 2); //divided by 2 for smoothness
@@ -306,6 +310,12 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		super.onStop();
 	}
 	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		this.finish();
+	}
+	
 	public void onClick(View view) {
 
 		switch (view.getId()) {
@@ -320,7 +330,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 		}
 	}
-
 	
 	public void TurnOffDeveloperMode(){
 //		TextView tv;
@@ -373,7 +382,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 //			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
 			locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, locationListener, null);
 			location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			Log.i("location", location.getLatitude() + "," + location.getLongitude());
+//			Log.i("location", location.getLatitude() + "," + location.getLongitude());
 			SensorResult.put("location", location.getLatitude() + "," + location.getLongitude());
 		}
 
@@ -420,7 +429,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			
 			SensorResult.put("address", address);
 
-			Log.i("address", address);
+//			Log.i("address", address);
 		}
 
 	}
@@ -437,7 +446,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		}
 
 		protected void onPreExecute() {
-			Log.i("Wifi", "start");
+//			Log.i("Wifi", "start");
 		}
 
 		@Override
@@ -446,7 +455,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			int returnValue = 0;
 			for (int counts : totalCounts) {
 				while (counts > 0) {
-					Log.i("Wifi", Integer.toString(counts));
+//					Log.i("Wifi", Integer.toString(counts));
 					counts--;
 					wifi.startScan();
 
@@ -465,7 +474,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 							itemCount--;
 						}
 					}
-					Log.i("numberOfWiFiPointsFound", "numberOfWiFiPointsFound=" + Integer.toString(numberOfWiFiPointsFound));
+//					Log.i("numberOfWiFiPointsFound", "numberOfWiFiPointsFound=" + Integer.toString(numberOfWiFiPointsFound));
 					try {
 						numberOfWiFiPointsFound = numberOfWiFiPointsFound - 1;
 
@@ -505,7 +514,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			mProgressStatusWiFi = 100;
 			mProgressWiFi.setProgress(100);
 
-			Log.i("Wifi", "stop");
+//			Log.i("Wifi", "stop");
 
 			TextView textviewWiFi = (TextView) findViewById(R.id.textView_WiFi_status);
 			textviewWiFi.clearAnimation();
@@ -514,7 +523,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			imageViewWiFi.setVisibility(View.VISIBLE);
 			asyncTasksProgress++;
 			
-			SensorResult.put("wifi", combinedScannedWiFiResult);
+			SensorResult.put("wifiList", combinedScannedWiFiResult);
 
 		}
 	}
@@ -536,7 +545,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 		protected void onPreExecute() {
 			mSensor.start();
-			Log.i("Noise", "start");
+//			Log.i("Noise", "start");
 		}
 
 		@Override
@@ -544,7 +553,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 			int counts = totalCounts[0];
 			while (counts > 0) {
-				Log.i("Noise", Integer.toString(counts));
+//				Log.i("Noise", Integer.toString(counts));
 				counts--;
 				double amp = mSensor.getAmplitude();
 				amp = Double.parseDouble(decimalFormat.format(amp));
@@ -578,7 +587,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			mProgressStatusNoise = 100;
 			mProgressNoise.setProgress(100);
 
-			Log.i("Noise", "stop");
+//			Log.i("Noise", "stop");
 
 			TextView textviewNoise = (TextView) findViewById(R.id.textView_Noise_status);
 			textviewNoise.clearAnimation();
@@ -587,7 +596,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			imageViewNoise.setVisibility(View.VISIBLE);
 			asyncTasksProgress++;
 			
-			SensorResult.put("noise", combinedRecordedNoiseResult);
+			SensorResult.put("noiseLevel", combinedRecordedNoiseResult);
 
 		}
 	}
@@ -601,7 +610,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 			
 			while (true){
-				Log.i("checkValue",Integer.toString(asyncTasksProgress));
+//				Log.i("checkValue",Integer.toString(asyncTasksProgress));
 				if(asyncTasksProgress==3) {
 					break;
 				}else{
@@ -612,7 +621,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 					}
 				}
 			}
-			Log.i("checked", "done");
+//			Log.i("checked", "done");
 
 			return 0;
 
@@ -659,7 +668,8 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			progressBar_spinner_Upload.setVisibility(View.VISIBLE);
 	    }
 		
-	    @Override
+	    @SuppressLint("SimpleDateFormat")
+		@Override
 	    protected String doInBackground(String... userProfiles) {
 	    	String response = "";
 	    	for (String userProfile : userProfiles) {
@@ -670,11 +680,27 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		        
 		        nameValuePairs.add(new BasicNameValuePair("function", "upload"));
-		        for (int i = 0; i < keys.length; i++)
+		        for (int i = 0; i < keys.length; i++){
 		        	nameValuePairs.add(new BasicNameValuePair(keys[i], SensorResult.get(keys[i])));
+					Log.i(keys[i], SensorResult.get(keys[i]).toString());
+		        }
 		        
-		        nameValuePairs.add(new BasicNameValuePair("userID", "7777"));
-		        nameValuePairs.add(new BasicNameValuePair("group", "6666"));
+		        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+				String userID = settings.getString("userIDforGroupStatus", "n/a");
+				String group = settings.getString("groupUserBelondedTo", "n/a");
+
+				nameValuePairs.add(new BasicNameValuePair("userID", userID));
+				nameValuePairs.add(new BasicNameValuePair("group", group));
+
+				Time today = new Time(Time.getCurrentTimezone());
+				today.setToNow(); 
+				
+				String currentTime = today.month + "/" + today.monthDay + "," + today.format("%k:%M:%S");
+
+				nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
+			
+				
+		        nameValuePairs.add(new BasicNameValuePair("groupStatus", "I don't know what others are doing!"));
 		        
 		        try {
 					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -707,6 +733,8 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	            dialog.dismiss();
 	        }
 	    	
+	    	progressBar_spinner_Upload.setVisibility(View.INVISIBLE);
+	    	
 	    	if(result.endsWith("success")){	    			    	
 //	    		final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded", Toast.LENGTH_SHORT);
 //		    	toast.setGravity(Gravity.CENTER, 0, 100);
@@ -723,7 +751,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 //			        }
 //			    }.start();
 			    
-	    		progressBar_spinner_Upload.setVisibility(View.INVISIBLE);
+	    		
 			    ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
 			    imageView_checked_Upload.setVisibility(View.VISIBLE);
 			    
