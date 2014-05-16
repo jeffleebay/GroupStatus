@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sensor_data_collector"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:contentDescription="@string/desc" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/black"
+        android:src="@drawable/application_background" >
+    </ImageView>
+
+    <!-- Status -->
+
+    <ImageView
+        android:id="@+id/area_Status"
+        android:layout_width="260dp"
+        android:layout_height="135dp"
+        android:layout_below="@+id/space_Status"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:alpha=".8"
+        android:background="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/area_shadow_buttom_Status"
+        android:layout_width="252dp"
+        android:layout_height="3dp"
+        android:layout_alignLeft="@+id/area_Status"
+        android:layout_below="@+id/area_Status"
+        android:layout_marginLeft="8dp"
+        android:adjustViewBounds="true"
+        android:alpha=".5"
+        android:background="@android:color/black" />
+
+    <ImageView
+        android:id="@+id/area_shadow_side_Status"
+        android:layout_width="3dp"
+        android:layout_height="132dp"
+        android:layout_alignTop="@+id/area_Status"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@+id/area_Status"
+        android:adjustViewBounds="true"
+        android:alpha=".5"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/space_Status"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:text=" " />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_Status"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space_Status"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:gravity="center_vertical" >
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="Status icon"
+            android:src="@drawable/wifi" />
+
+        <TextView
+            android:id="@+id/textView_Status"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:text=" Status "
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider_Status"
+        android:layout_width="240dp"
+        android:layout_height="1dp"
+        android:layout_below="@id/linearLayout_Status"
+        android:layout_centerHorizontal="true"
+        android:background="#999999" />
+
+    <EditText
+        android:id="@+id/EditText_Update_Status"
+        android:layout_width="240dp"
+        android:layout_height="90dp"
+        android:layout_below="@id/divider_Status"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:gravity="left|top"
+        android:hint="Ex. Took a bus to buy groceries in Trader Joes with roommates #lifeexpense #dinner #toohot #universitytowncenter"
+        android:inputType="textMultiLine"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        android:textSize="15sp" >
+    </EditText>
+    
+    <!-- GroupStatus -->
+
+    <ImageView
+        android:id="@+id/area_GroupStatus"
+        android:layout_width="260dp"
+        android:layout_height="135dp"
+        android:layout_below="@+id/space_GroupStatus"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:alpha=".8"
+        android:background="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/area_shadow_buttom_GroupStatus"
+        android:layout_width="252dp"
+        android:layout_height="3dp"
+        android:layout_alignLeft="@+id/area_GroupStatus"
+        android:layout_below="@+id/area_GroupStatus"
+        android:layout_marginLeft="8dp"
+        android:adjustViewBounds="true"
+        android:alpha=".5"
+        android:background="@android:color/black" />
+
+    <ImageView
+        android:id="@+id/area_shadow_side_GroupStatus"
+        android:layout_width="3dp"
+        android:layout_height="132dp"
+        android:layout_alignTop="@+id/area_GroupStatus"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@+id/area_GroupStatus"
+        android:adjustViewBounds="true"
+        android:alpha=".5"
+        android:background="@android:color/black" />
+
+    <TextView
+        android:id="@+id/space_GroupStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/EditText_Update_Status"
+        android:text=" " />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_GroupStatus"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/space_GroupStatus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:gravity="center_vertical" >
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="GroupStatus icon"
+            android:src="@drawable/wifi" />
+
+        <TextView
+            android:id="@+id/textView_GroupStatus"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:text=" GroupStatus "
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider_GroupStatus"
+        android:layout_width="240dp"
+        android:layout_height="1dp"
+        android:layout_below="@id/linearLayout_GroupStatus"
+        android:layout_centerHorizontal="true"
+        android:background="#999999" />
+
+    <EditText
+        android:id="@+id/EditText_Update_GroupStatus"
+        android:layout_width="240dp"
+        android:layout_height="90dp"
+        android:layout_below="@id/divider_GroupStatus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:gravity="left|top"
+        android:hint="Ex. Took a bus to buy groceries in Trader Joes with roommates #lifeexpense #dinner #toohot #universitytowncenter"
+        android:inputType="textMultiLine"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        android:textSize="15sp" >
+    </EditText>
+
+    <!-- Button -->
+
+    <ImageView
+        android:id="@+id/area_Button"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/space_Button"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:alpha=".85"
+        android:background="@android:color/white" />
+
+    <TextView
+        android:id="@+id/space_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/EditText_Update_GroupStatus"
+        android:text=" " />
+
+    <TextView
+        android:id="@+id/textView_ReportButton"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/space_Button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Update"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/space_ButtomOfThePage"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/area_ListView"
+        android:text=" " />
+
+</RelativeLayout>
