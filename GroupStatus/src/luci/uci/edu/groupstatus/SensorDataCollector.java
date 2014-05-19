@@ -702,13 +702,10 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 				Time today = new Time(Time.getCurrentTimezone());
 				today.setToNow(); 
 				
-				String currentTime = today.month + "/" + today.monthDay + "," + today.format("%k:%M:%S");
+				String currentTime = Integer.toString(today.month+1) + "/" + Integer.toString(today.monthDay) + "," + today.format("%k:%M:%S");
 
 				nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
 			
-				
-//		        nameValuePairs.add(new BasicNameValuePair("groupStatus", "I don't know what others are doing!"));
-		        
 		        try {
 					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				} catch (UnsupportedEncodingException e1) {

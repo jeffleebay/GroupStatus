@@ -24,7 +24,10 @@ public class StatusCollector extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.status_collector);
-		SetVisibility();
+		
+		//Set Visibility
+		findViewById(R.id.groupStatus_blocks).setVisibility(View.GONE);
+
 		final TextView tvNext = (TextView) findViewById(R.id.Button_Status_Next);
 		tvNext.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -33,9 +36,12 @@ public class StatusCollector extends Activity {
 				reportedStatus = tvStatus.getText().toString();
 				tvStatus.clearFocus();
 
-				MoveLeftandFadeOutView();
-				MoveLeftandFadeInView();
+				//Move Left and Fade Out View
+				findViewById(R.id.status_blocks).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_out));
 
+				//Move Left and Fade In View
+				findViewById(R.id.groupStatus_blocks).setVisibility(View.VISIBLE);
+				findViewById(R.id.groupStatus_blocks).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
 			}
 		});
 
@@ -57,45 +63,14 @@ public class StatusCollector extends Activity {
 	}
 
 	public void SetVisibility() {
-		findViewById(R.id.area_GroupStatus).setVisibility(View.GONE);
-		findViewById(R.id.area_shadow_buttom_GroupStatus).setVisibility(View.GONE);
-		findViewById(R.id.area_shadow_side_GroupStatus).setVisibility(View.GONE);
-		findViewById(R.id.linearLayout_GroupStatus).setVisibility(View.GONE);
-		findViewById(R.id.divider_GroupStatus).setVisibility(View.GONE);
-		findViewById(R.id.EditText_Update_GroupStatus).setVisibility(View.GONE);
-		findViewById(R.id.Button_GroupStatus_Update).setVisibility(View.GONE);
+		
 	}
 
 	public void MoveLeftandFadeInView() {
 
-		findViewById(R.id.area_GroupStatus).setVisibility(View.VISIBLE);
-		findViewById(R.id.area_shadow_buttom_GroupStatus).setVisibility(View.VISIBLE);
-		findViewById(R.id.area_shadow_side_GroupStatus).setVisibility(View.VISIBLE);
-		findViewById(R.id.linearLayout_GroupStatus).setVisibility(View.VISIBLE);
-		findViewById(R.id.divider_GroupStatus).setVisibility(View.VISIBLE);
-		findViewById(R.id.Button_GroupStatus_Update).setVisibility(View.INVISIBLE);
-		findViewById(R.id.EditText_Update_GroupStatus).setVisibility(View.VISIBLE);
-
-		findViewById(R.id.EditText_Update_Status).setVisibility(View.GONE);
-		findViewById(R.id.Button_Status_Next).setVisibility(View.GONE);
-
-		findViewById(R.id.area_GroupStatus).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
-		findViewById(R.id.area_shadow_buttom_GroupStatus).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
-		findViewById(R.id.area_shadow_side_GroupStatus).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
-		findViewById(R.id.linearLayout_GroupStatus).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
-		findViewById(R.id.divider_GroupStatus).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
-		findViewById(R.id.EditText_Update_GroupStatus).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
-		findViewById(R.id.Button_GroupStatus_Update).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
-	}
+			}
 
 	public void MoveLeftandFadeOutView() {
-		findViewById(R.id.area_Status).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_out));
-		findViewById(R.id.area_shadow_buttom_Status).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_out));
-		findViewById(R.id.area_shadow_side_Status).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_out));
-		findViewById(R.id.linearLayout_Status).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_out));
-		findViewById(R.id.divider_Status).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_out));
-		findViewById(R.id.EditText_Update_Status).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_out));
-		findViewById(R.id.Button_Status_Next).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_out));
 	}
 	
 	@Override
