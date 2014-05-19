@@ -59,24 +59,24 @@ public class Initialization extends Activity {
 				int month = Integer.parseInt(startingDate.getText().toString().substring(0, 2));
 				int date = Integer.parseInt(startingDate.getText().toString().substring(2));
 				setNotificationsForExperiment(month, date);
-				Intent i = new Intent(Initialization.this, StatusReporter.class);
+				Intent i = new Intent(Initialization.this, StatusCollector.class);
 				startActivity(i);
 			}
 		});
 		final TextView setupTextViewTest = (TextView) findViewById(R.id.setupTextViewTest);
 		setupTextViewTest.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				int month = Integer.parseInt(startingDate.getText().toString().substring(0, 2));
-				int date = Integer.parseInt(startingDate.getText().toString().substring(2));
+//				int month = Integer.parseInt(startingDate.getText().toString().substring(0, 2));
+//				int date = Integer.parseInt(startingDate.getText().toString().substring(2));
 				setNotificationsForTesting();
-				Intent i = new Intent(Initialization.this, StatusReporter.class);
+				Intent i = new Intent(Initialization.this, StatusCollector.class);
 				startActivity(i);
 			}
 		});
 		final TextView setupTextViewSkip = (TextView) findViewById(R.id.setupTextViewSkip);
 		setupTextViewSkip.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(Initialization.this, StatusReporter.class);
+				Intent i = new Intent(Initialization.this, StatusCollector.class);
 				startActivity(i);
 			}
 		});

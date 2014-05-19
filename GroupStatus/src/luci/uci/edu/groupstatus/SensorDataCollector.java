@@ -70,7 +70,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	Boolean DEVELOPER_MODE = false;
 	int asyncTasksProgress = 0;
 	HashMap<String, String> SensorResult = new HashMap<String, String>();
-	String keys[] = { "status", "wifiList", "noiseLevel", "location", "address" };
+	String keys[] = { "status", "groupStatus", "wifiList", "noiseLevel", "location", "address" };
 
 	// Vars for WiFi
 	WifiManager wifi;
@@ -183,6 +183,13 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 			SensorResult.put("status", status);
 		}else{
 			SensorResult.put(keys[0], "Coding in Vista del Campo");
+		}
+		
+		if (getIntent().hasExtra("groupStatus")) {
+			String groupStatus = getIntent().getExtras().getString("groupStatus");
+			SensorResult.put("groupStatus", groupStatus);
+		}else{
+			SensorResult.put(keys[1], "No Guess");
 		}
 
 		// Vars for buttons
@@ -337,7 +344,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		findViewById(R.id.area_SnL).setVisibility(View.GONE);
 		findViewById(R.id.area_shadow_buttom_SnL).setVisibility(View.GONE);
 		findViewById(R.id.area_shadow_side_SnL).setVisibility(View.GONE);
-//		findViewById(R.id.space_ListView).setVisibility(View.GONE);        //disabled for margin bottom 
+//		findViewById(R.id.space_ListView).setVisibility(View.GONE);        //kept visible for margin bottom 
 		findViewById(R.id.linearLayout_SnL_S).setVisibility(View.GONE);
 		findViewById(R.id.divider_SnL).setVisibility(View.GONE);
 		findViewById(R.id.linearLayout_SnL_L).setVisibility(View.GONE);
@@ -700,7 +707,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 				nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
 			
 				
-		        nameValuePairs.add(new BasicNameValuePair("groupStatus", "I don't know what others are doing!"));
+//		        nameValuePairs.add(new BasicNameValuePair("groupStatus", "I don't know what others are doing!"));
 		        
 		        try {
 					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
