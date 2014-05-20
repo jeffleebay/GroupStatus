@@ -70,7 +70,6 @@ import android.widget.Toast;
 public class SensorDataCollector extends Activity implements OnClickListener {
 	
 	//Vars for storing collected data
-	Boolean DEVELOPER_MODE = false;
 	int asyncTasksProgress = 0;
 	HashMap<String, String> SensorResult = new HashMap<String, String>();
 	String keys[] = { "status", "groupStatus", "wifiList", "noiseLevel", "location", "address" };
@@ -78,9 +77,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	// Vars for WiFi
 	WifiManager wifi;
 	BroadcastReceiver wifiBroadcastReceiver;
-	ListView listViewForWiFiResults;
 	ArrayList<HashMap<String, String>> arraylistForWiFiResult = new ArrayList<HashMap<String, String>>();
-	SimpleAdapter adapterForWiFiResult;
 	String WIFI_ITEM_KEY = "wifi";
 	List<ScanResult> scannedWiFiResults;
 	int numberOfWiFiPointsFound = 0;
@@ -112,10 +109,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	private static final int NOISE_POLL_INTERVAL = 300; // milliseconds
 	private static final int NOISE_POLL_Times = 1000 * NOISE_POLL_Time_Interval / NOISE_POLL_INTERVAL;
 	private SoundMeter mSensor;
-	// private Handler mHandler = new Handler();
-	ListView listViewForNoiseResult;
 	ArrayList<HashMap<String, String>> arraylistForNoiseResult = new ArrayList<HashMap<String, String>>();
-	SimpleAdapter adapterForNoiseResult;
 	String NOISE_ITEM_KEY = "noise";
 
 	//Vars for Noise progress bar
@@ -179,13 +173,9 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sensor_data_collector);
 		
-		if (!DEVELOPER_MODE) TurnOffDeveloperMode();
-
 		// Vars for Status
-		TextView textView = (TextView) findViewById(R.id.textViewTheStatus);
 		if (getIntent().hasExtra("status")) {
 			String status = getIntent().getExtras().getString("status");
-			textView.setText(status);	
 			SensorResult.put("status", status);
 		}else{
 			SensorResult.put(keys[0], "Coding in Vista del Campo");
@@ -206,33 +196,12 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		imageViewReportButton.setOnClickListener(this);
 
 		// Vars for WiFi
-		listViewForWiFiResults = (ListView) findViewById(R.id.list_WiFi);
-		listViewForWiFiResults.setOnTouchListener(new ListView.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				int action = event.getAction();
-				switch (action) {
-				case MotionEvent.ACTION_DOWN: // Disallow ScrollView to intercept touch events.
-					v.getParent().requestDisallowInterceptTouchEvent(true);
-					break;
-
-				case MotionEvent.ACTION_UP:   // Allow ScrollView to intercept touch events.
-					v.getParent().requestDisallowInterceptTouchEvent(false);
-					break;
-				}
-				v.onTouchEvent(event);		// Handle ListView touch events.
-				return true;
-			}
-		});
 
 		wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if (wifi.isWifiEnabled() == false) {
 			Toast.makeText(getApplicationContext(), "Wifi was disabled. Enabling now...", Toast.LENGTH_LONG).show();
 			wifi.setWifiEnabled(true);
 		}
-		this.adapterForWiFiResult = new SimpleAdapter(SensorDataCollector.this, arraylistForWiFiResult, android.R.layout.simple_list_item_1,
-				new String[] { WIFI_ITEM_KEY }, new int[] { android.R.id.text1 });
-		listViewForWiFiResults.setAdapter(this.adapterForWiFiResult);
 
 		wifiBroadcastReceiver = new BroadcastReceiver() 
 		{
@@ -245,29 +214,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		registerReceiver(wifiBroadcastReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
 		// Vars for Noise
-		listViewForNoiseResult = (ListView) findViewById(R.id.list_Noise);
-		listViewForNoiseResult.setOnTouchListener(new ListView.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				int action = event.getAction();
-				switch (action) {
-				case MotionEvent.ACTION_DOWN: // Disallow ScrollView to intercept touch events.
-					v.getParent().requestDisallowInterceptTouchEvent(true);
-					break;
-
-				case MotionEvent.ACTION_UP:   // Allow ScrollView to intercept touch events.
-					v.getParent().requestDisallowInterceptTouchEvent(false);
-					break;
-				}
-				v.onTouchEvent(event);		// Handle ListView touch events.
-				return true;
-			}
-		});
-		
-		this.adapterForNoiseResult = new SimpleAdapter(SensorDataCollector.this, arraylistForNoiseResult, android.R.layout.simple_list_item_1,
-				new String[] { NOISE_ITEM_KEY }, new int[] { android.R.id.text1 });
-		listViewForNoiseResult.setAdapter(this.adapterForNoiseResult);
-
 		mSensor = new SoundMeter();
 
 		// Vars for database
@@ -359,25 +305,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 		}
 	}
-	
-	public void TurnOffDeveloperMode(){
-//		TextView tv;
-//		ImageView iv;
-		findViewById(R.id.area_SnL).setVisibility(View.GONE);
-		findViewById(R.id.area_shadow_buttom_SnL).setVisibility(View.GONE);
-		findViewById(R.id.area_shadow_side_SnL).setVisibility(View.GONE);
-//		findViewById(R.id.space_ListView).setVisibility(View.GONE);        //kept visible for margin bottom 
-		findViewById(R.id.linearLayout_SnL_S).setVisibility(View.GONE);
-		findViewById(R.id.divider_SnL).setVisibility(View.GONE);
-		findViewById(R.id.linearLayout_SnL_L).setVisibility(View.GONE);
-		
-		findViewById(R.id.area_ListView).setVisibility(View.GONE);
-		findViewById(R.id.area_shadow_buttom_ListView).setVisibility(View.GONE);
-		findViewById(R.id.area_shadow_side_ListView).setVisibility(View.GONE);
-		findViewById(R.id.space_ListView).setVisibility(View.GONE);
-		findViewById(R.id.linearLayout_Listview).setVisibility(View.GONE);
-		findViewById(R.id.space_ButtomOfThePage).setVisibility(View.GONE);
-	}
 
 	private class MyLocationListener implements LocationListener {
 
@@ -443,9 +370,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(String address) {
 
-			TextView textViewTheLocation = (TextView) findViewById(R.id.TextView_TheLocation);
-			textViewTheLocation.setText(address);
-
 			mProgressStatusLocation = 100;
 			mProgressLocation.setProgress(100);
 
@@ -488,28 +412,15 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 					counts--;
 					wifi.startScan();
 
-					ListView tempLV = (ListView) findViewById(R.id.list_WiFi);
 					List<String> myList = new ArrayList<String>();
 
-					int itemCount = tempLV.getCount();
-
-					if (itemCount > 0) {
-						// Log.i("line", Integer.toString(204));
-						while (itemCount > 0) {
-							@SuppressWarnings("unchecked")
-							HashMap<String, String> item = (HashMap<String, String>) tempLV.getItemAtPosition(itemCount - 1);
-							myList.add(item.get("wifi"));
-
-							itemCount--;
-						}
-					}
 //					Log.i("numberOfWiFiPointsFound", "numberOfWiFiPointsFound=" + Integer.toString(numberOfWiFiPointsFound));
 					try {
 						numberOfWiFiPointsFound = numberOfWiFiPointsFound - 1;
 
 						while (numberOfWiFiPointsFound >= 0) {
 							 String wiFiAccessPoint =  scannedWiFiResults.get(numberOfWiFiPointsFound).BSSID;
-							// + "  "  +  scannedWiFiResults.get(numberOfWiFiPointsFound).capabilities;
+//							 + "  "  +  scannedWiFiResults.get(numberOfWiFiPointsFound).capabilities;
 //							String wiFiAccessPoint = scannedWiFiResults.get(numberOfWiFiPointsFound).SSID + ";"
 //									+ scannedWiFiResults.get(numberOfWiFiPointsFound).BSSID + ";"
 //									+ scannedWiFiResults.get(numberOfWiFiPointsFound).level;
@@ -539,7 +450,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(Integer counts) {
 
-			adapterForWiFiResult.notifyDataSetChanged();
 			mProgressStatusWiFi = 100;
 			mProgressWiFi.setProgress(100);
 
@@ -612,7 +522,6 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 			mSensor.stop();
 
-			adapterForNoiseResult.notifyDataSetChanged();
 			mProgressStatusNoise = 100;
 			mProgressNoise.setProgress(100);
 
