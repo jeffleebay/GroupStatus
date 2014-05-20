@@ -42,6 +42,9 @@ public class StatusCollector extends Activity {
 				//Move Left and Fade In View
 				findViewById(R.id.groupStatus_blocks).setVisibility(View.VISIBLE);
 				findViewById(R.id.groupStatus_blocks).startAnimation((Animation) AnimationUtils.loadAnimation(StatusCollector.this, R.anim.move_left_and_fade_in));
+				
+				TextView tvGroupStatus = (TextView) findViewById(R.id.EditText_Update_GroupStatus);
+				tvGroupStatus.requestFocus();
 			}
 		});
 
@@ -49,7 +52,7 @@ public class StatusCollector extends Activity {
 		tvUpdate.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				TextView tvGroupStatus = (TextView) findViewById(R.id.EditText_Update_Status);
+				TextView tvGroupStatus = (TextView) findViewById(R.id.EditText_Update_GroupStatus);
 				repostedGroupStatus = tvGroupStatus.getText().toString();
 				
 				Intent intent = new Intent(StatusCollector.this, SensorDataCollector.class);
@@ -60,17 +63,6 @@ public class StatusCollector extends Activity {
 			}
 		});
 
-	}
-
-	public void SetVisibility() {
-		
-	}
-
-	public void MoveLeftandFadeInView() {
-
-			}
-
-	public void MoveLeftandFadeOutView() {
 	}
 	
 	@Override

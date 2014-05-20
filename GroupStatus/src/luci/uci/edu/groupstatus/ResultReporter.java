@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import luci.uci.edu.groupstatus.datastore.StatusDataSource;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -32,6 +34,8 @@ import android.widget.Toast;
 
 public class ResultReporter extends Activity implements OnClickListener {
 
+	private StatusDataSource statusDataSource;
+	
 	HashMap<String, String> SensorResult = new HashMap<String, String>();
 	String keys[] = { "status", "wifi", "noise", "location", "address" };
 	ImageView iv;
@@ -49,22 +53,37 @@ public class ResultReporter extends Activity implements OnClickListener {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onClick(View v) {
+
+		statusDataSource = new StatusDataSource(getApplicationContext());
+		statusDataSource.open();
+		
+		statusDataSource.createAStatusObject(
+				"nameValuePairs.get(1).getValue()",
+				"nameValuePairs.get(2).getValue()",
+				"nameValuePairs.get(3).getValue()",
+				"nameValuePairs.get(4).getValue()",
+				"nameValuePairs.get(5).getValue()",
+				"nameValuePairs.get(6).getValue()",
+				"nameValuePairs.get(7).getValue()",
+				"nameValuePairs.get(8).getValue()",
+				"nameValuePairs.get(9).getValue()");
+		
+		statusDataSource.close();
 		
 		
-		
-		if (getIntent().hasExtra("results")) {
-			SensorResult = (HashMap<String, String>) getIntent().getSerializableExtra("results");
-		for (int i = 0; i < keys.length; i++)
-			Log.i(keys[i], SensorResult.get(keys[i]));
-		}else{
-			SensorResult.put(keys[0], "Coding in Vista del Campo");
-			SensorResult.put(keys[1], "48:f8:b3:43:a0:5a,-85;28:c6:8e:a8:d4:0f,-86;14:d6:4d:30:85:aa,-82;08:86:3b:1a:36:d4,-55;");
-			SensorResult.put(keys[2], "0.01;0.11;0.01;0.02;0.01;0.01;0.24;0.02;0.01;0.11;0.03;0.02;0.02;0.07;0.01;0.04;0.03;0.02;0.66;0.01;");
-			SensorResult.put(keys[3], "33.64394436,-117.823742");
-			SensorResult.put(keys[4], "462-510: 462-510 Arroyo Dr, Irvine, United States, 92617");
-		}
-		UploadToServer uploadToServer = new UploadToServer(ResultReporter.this);
-		uploadToServer.execute(" ");	
+//		if (getIntent().hasExtra("results")) {
+//			SensorResult = (HashMap<String, String>) getIntent().getSerializableExtra("results");
+//		for (int i = 0; i < keys.length; i++)
+//			Log.i(keys[i], SensorResult.get(keys[i]));
+//		}else{
+//			SensorResult.put(keys[0], "Coding in Vista del Campo");
+//			SensorResult.put(keys[1], "48:f8:b3:43:a0:5a,-85;28:c6:8e:a8:d4:0f,-86;14:d6:4d:30:85:aa,-82;08:86:3b:1a:36:d4,-55;");
+//			SensorResult.put(keys[2], "0.01;0.11;0.01;0.02;0.01;0.01;0.24;0.02;0.01;0.11;0.03;0.02;0.02;0.07;0.01;0.04;0.03;0.02;0.66;0.01;");
+//			SensorResult.put(keys[3], "33.64394436,-117.823742");
+//			SensorResult.put(keys[4], "462-510: 462-510 Arroyo Dr, Irvine, United States, 92617");
+//		}
+//		UploadToServer uploadToServer = new UploadToServer(ResultReporter.this);
+//		uploadToServer.execute(" ");	
 		
 	}
 	

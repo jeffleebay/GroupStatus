@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import luci.uci.edu.groupstatus.datastore.StatusDataSource;
+import luci.uci.edu.groupstatus.datastore.StatusObject;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -167,6 +170,9 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	DetectBackgroundNoise detectBackgroundNoise;
 	GetAddressTask getAddressTask;
 	CheckUpdatingProgress checkUpdatingProgress;
+	
+	//Vars for database
+	private StatusDataSource statusDataSource;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -221,7 +227,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 		wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if (wifi.isWifiEnabled() == false) {
-			Toast.makeText(getApplicationContext(), "wifi is disabled..making it enabled", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Wifi was disabled. Enabling now...", Toast.LENGTH_LONG).show();
 			wifi.setWifiEnabled(true);
 		}
 		this.adapterForWiFiResult = new SimpleAdapter(SensorDataCollector.this, arraylistForWiFiResult, android.R.layout.simple_list_item_1,
@@ -264,8 +270,8 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 		mSensor = new SoundMeter();
 
-		// Vars for location
-		
+		// Vars for database
+		statusDataSource = new StatusDataSource(getApplicationContext());
 
 		//Activate
 		
@@ -313,8 +319,13 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	
 	@Override
 	public void onStop() {
-		unregisterReceiver(wifiBroadcastReceiver);
 		super.onStop();
+	}
+	
+	@Override
+	public void onDestroy() {
+		unregisterReceiver(wifiBroadcastReceiver);
+		super.onDestroy();
 	}
 	
 	@Override
@@ -327,12 +338,23 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 
 		switch (view.getId()) {
 		case R.id.area_Button:
-//			Intent intent = new Intent(SensorDataCollector.this, ResultReporter.class);
-//            intent.putExtra("results", SensorResult);
-//            startActivity(intent);
-			UploadToServer uploadToServer = new UploadToServer(SensorDataCollector.this);
-			uploadToServer.execute(" ");	
 			
+//			wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+//
+//			statusDataSource.open();
+//			List<StatusObject> listOfStatusObjects = statusDataSource.getAllStatusObjects();
+//    		System.out.println("listsize: " + listOfStatusObjects.size());
+//			//check if there is any stored in the database
+//			if (!listOfStatusObjects.isEmpty()) {
+//				wifi.setWifiEnabled(false);
+//			}else{
+//				wifi.setWifiEnabled(true);
+//			}
+//			statusDataSource.close();
+
+			UploadToServer uploadToServer = new UploadToServer(SensorDataCollector.this);
+			uploadToServer.execute(" ");
+
 			break;
 
 		}
@@ -652,9 +674,10 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	
 	private class UploadToServer extends AsyncTask<String, Void, String> {
 		
-	    private ProgressDialog dialog;
-        private Context context; // application context.
-        private ProgressBar progressBar_spinner_Upload;
+	    ProgressDialog dialog;
+        Context context; // application context.
+        ProgressBar progressBar_spinner_Upload;
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
         
 		public UploadToServer(Activity activity) {
@@ -677,58 +700,58 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 		
 	    @SuppressLint("SimpleDateFormat")
 		@Override
-	    protected String doInBackground(String... userProfiles) {
-	    	String response = "";
-	    	for (String userProfile : userProfiles) {
-		        DefaultHttpClient client = new DefaultHttpClient();
-		        
-		        // Add sensor data       
-		        HttpPost httppost = new HttpPost("http://group-status-376.appspot.com/groupstatus_server");		        	        
-		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		        
-		        nameValuePairs.add(new BasicNameValuePair("function", "upload"));
-		        for (int i = 0; i < keys.length; i++){
-		        	nameValuePairs.add(new BasicNameValuePair(keys[i], SensorResult.get(keys[i])));
-					Log.i(keys[i], SensorResult.get(keys[i]).toString());
-		        }
-		        
-		        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-				String userID = settings.getString("userIDforGroupStatus", "n/a");
-				String group = settings.getString("groupUserBelondedTo", "n/a");
+		protected String doInBackground(String... userProfiles) {
+			String response = "";
+			String userProfile[] = userProfiles;
 
-				nameValuePairs.add(new BasicNameValuePair("userID", userID));
-				nameValuePairs.add(new BasicNameValuePair("group", group));
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://group-status-376.appspot.com/groupstatus_server");
 
-				Time today = new Time(Time.getCurrentTimezone());
-				today.setToNow(); 
-				
-				String currentTime = Integer.toString(today.month+1) + "/" + Integer.toString(today.monthDay) + "," + today.format("%k:%M:%S");
+			//Add function
+			nameValuePairs.add(new BasicNameValuePair("function", "upload"));
 
-				nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
-			
-		        try {
-					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				} catch (UnsupportedEncodingException e1) {
-					e1.printStackTrace();
+			//Add user information
+			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+			String userID = settings.getString("userIDforGroupStatus", "n/a");
+			String group = settings.getString("groupUserBelondedTo", "n/a");
+
+			nameValuePairs.add(new BasicNameValuePair("userID", userID));
+			nameValuePairs.add(new BasicNameValuePair("group", group));
+
+			//Add time stamp
+			Time today = new Time(Time.getCurrentTimezone());
+			today.setToNow();
+			String currentTime = Integer.toString(today.month + 1) + "/" + Integer.toString(today.monthDay) + "," + today.format("%k:%M:%S");
+			nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
+
+			// Add sensor data       
+			for (int i = 0; i < keys.length; i++) {
+				nameValuePairs.add(new BasicNameValuePair(keys[i], SensorResult.get(keys[i])));
+//				Log.i(keys[i], SensorResult.get(keys[i]).toString());
+			}
+
+			try {
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+
+			try {
+				HttpResponse execute = client.execute(httppost);
+				InputStream content = execute.getEntity().getContent();
+
+				BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+				String s = "";
+				while ((s = buffer.readLine()) != null) {
+					response += s;
 				}
-		        
-		        try {
-		          HttpResponse execute = client.execute(httppost);
-		          InputStream content = execute.getEntity().getContent();
-	
-		          BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-		          String s = "";
-		          while ((s = buffer.readLine()) != null) {
-		            response += s;
-		          }
-	
-		        } catch (Exception e) {
-		          e.printStackTrace();
-		        }
-		    }
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			return response;
-	    }
-	    
+		}
 
 		@Override
 	    protected void onPostExecute(String result) {
@@ -739,37 +762,152 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 	    	
 	    	progressBar_spinner_Upload.setVisibility(View.INVISIBLE);
 	    	
-	    	if(result.endsWith("success")){	    			    	
-//	    		final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded", Toast.LENGTH_SHORT);
-//		    	toast.setGravity(Gravity.CENTER, 0, 100);
-//		    	toast.show();
-//		    	
-//		    	//The count down timer is used for controlling display time more specifically -> for aesthetics 
-//		    	
-//		    	new CountDownTimer(50, 500) {						//duration = 100
-//			        public void onTick(long millisUntilFinished) {
-//			            toast.show();
-//			        }
-//			        public void onFinish() {
-//			            toast.cancel();
-//			        }
-//			    }.start();
-			    
+	    	if(result.endsWith("success")){	 
 	    		
-			    ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
-			    imageView_checked_Upload.setVisibility(View.VISIBLE);
-			    
+				statusDataSource.open();
+				List<StatusObject> listOfStatusObjects = statusDataSource.getAllStatusObjects();
+	    		
+				//check if there is any stored in the database
+				if (!listOfStatusObjects.isEmpty()) {
+					for (int i = 0; i < listOfStatusObjects.size(); i++) {
+						StatusObject statusObject = listOfStatusObjects.get(i);
+						UploadFromDBToServer uploadFromDBToServer = new UploadFromDBToServer(SensorDataCollector.this);
+						uploadFromDBToServer.execute(statusObject);
+						statusDataSource.deleteAStatusObject(statusObject);
+					}
+				}else{					
+					ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
+					imageView_checked_Upload.setVisibility(View.VISIBLE);
+					
+					final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded", Toast.LENGTH_SHORT);
+					toast.setGravity(Gravity.CENTER, 0, 100);
+					toast.show();
+				}
+				statusDataSource.close();
+				
+	    		
 		    	
 	    	}else{
-	    		Toast toast = Toast.makeText(getApplicationContext(),"Upload error. Invalid username or password.", Toast.LENGTH_SHORT);
+	    		Toast toast = Toast.makeText(getApplicationContext(),"Upload error. The status and data are stored to the local database.", Toast.LENGTH_SHORT);
 	    		toast.setGravity(Gravity.CENTER, 0, 100);
 		    	toast.show();
+		    	
+
+				statusDataSource.open();
+				statusDataSource.createAStatusObject(
+						nameValuePairs.get(1).getValue(),
+						nameValuePairs.get(2).getValue(),
+						nameValuePairs.get(3).getValue(),
+						nameValuePairs.get(4).getValue(),
+						nameValuePairs.get(5).getValue(),
+						nameValuePairs.get(6).getValue(),
+						nameValuePairs.get(7).getValue(),
+						nameValuePairs.get(8).getValue(),
+						nameValuePairs.get(9).getValue());
+				statusDataSource.close();
+		    	
 	    	}
 		    	
 	    }
 	  }	
-
 	
+	private class UploadFromDBToServer extends AsyncTask<StatusObject, Void, String> {
+		
+		ProgressDialog dialog;
+		Context context; // application context.
+		ProgressBar progressBar_spinner_Upload;
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		
+		
+		public UploadFromDBToServer(Activity activity) {
+			context = activity;
+			dialog = new ProgressDialog(context);
+		}
+		
+		protected void onPreExecute() {
+			this.dialog.setMessage("Uploading previous statuses to the server");
+			this.dialog.show();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			progressBar_spinner_Upload = (ProgressBar) findViewById(R.id.progressBar_spinner_Upload);
+			progressBar_spinner_Upload.setVisibility(View.VISIBLE);
+		}
+		
+		@SuppressLint("SimpleDateFormat")
+		@Override
+		protected String doInBackground(StatusObject... statusObjectParameter) {
+			String response = "";
+			StatusObject statusObject = statusObjectParameter[0];
+			
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpPost httppost = new HttpPost("http://group-status-376.appspot.com/groupstatus_server");
+
+			nameValuePairs.add(new BasicNameValuePair("function", "upload"));
+			nameValuePairs.add(new BasicNameValuePair("userID", statusObject.getUserID()));
+			nameValuePairs.add(new BasicNameValuePair("group", statusObject.getGroup()));
+			nameValuePairs.add(new BasicNameValuePair("timestamp", statusObject.getTimestamp()));
+			nameValuePairs.add(new BasicNameValuePair("status", statusObject.getStatus()));
+			nameValuePairs.add(new BasicNameValuePair("groupStatus", statusObject.getGroupStatus()));
+			nameValuePairs.add(new BasicNameValuePair("wifiList", statusObject.getWifiList()));
+			nameValuePairs.add(new BasicNameValuePair("noiseLevel", statusObject.getNoiseLevel()));
+			nameValuePairs.add(new BasicNameValuePair("location", statusObject.getLocation()));
+			nameValuePairs.add(new BasicNameValuePair("address", statusObject.getAddress()));
+
+			try {
+				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			} catch (UnsupportedEncodingException e1) {
+				e1.printStackTrace();
+			}
+			
+			try {
+				HttpResponse execute = client.execute(httppost);
+				InputStream content = execute.getEntity().getContent();
+				
+				BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+				String s = "";
+				while ((s = buffer.readLine()) != null) {
+					response += s;
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return response;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			
+			if (dialog.isShowing()) {
+				dialog.dismiss();
+			}
+			
+			progressBar_spinner_Upload.setVisibility(View.INVISIBLE);
+			
+			if(result.endsWith("success")){	    		
+				 
+				ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
+				imageView_checked_Upload.setVisibility(View.VISIBLE);
+				
+				final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.CENTER, 0, 100);
+				toast.show();
+				
+			}else{
+				Toast toast = Toast.makeText(getApplicationContext(),"Upload error. The status and data are stored to the local database.", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.CENTER, 0, 100);
+				toast.show();
+				
+			}
+			
+		}
+	}	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);

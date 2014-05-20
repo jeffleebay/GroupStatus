@@ -19,6 +19,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        <!-- WelcomePage -->
         <activity
             android:name="luci.uci.edu.groupstatus.WelcomePage"
             android:windowSoftInputMode="adjustPan|stateVisible"
