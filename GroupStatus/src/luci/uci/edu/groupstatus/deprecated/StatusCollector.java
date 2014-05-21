@@ -1,5 +1,11 @@
-package luci.uci.edu.groupstatus;
+package luci.uci.edu.groupstatus.deprecated;
 
+import luci.uci.edu.groupstatus.R;
+import luci.uci.edu.groupstatus.WelcomePage;
+import luci.uci.edu.groupstatus.R.anim;
+import luci.uci.edu.groupstatus.R.id;
+import luci.uci.edu.groupstatus.R.layout;
+import luci.uci.edu.groupstatus.R.menu;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;

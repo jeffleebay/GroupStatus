@@ -1,4 +1,4 @@
-package luci.uci.edu.groupstatus.notification;
+package luci.uci.edu.groupstatus.deprecated;
 
 import java.util.Calendar;
 

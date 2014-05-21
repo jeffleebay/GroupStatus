@@ -1,4 +1,4 @@
-package luci.uci.edu.groupstatus;
+package luci.uci.edu.groupstatus.deprecated;
 
 import SoundMeter.SoundMeter;
 import android.annotation.SuppressLint;
@@ -25,6 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import luci.uci.edu.groupstatus.R;
+import luci.uci.edu.groupstatus.WelcomePage;
+import luci.uci.edu.groupstatus.R.anim;
+import luci.uci.edu.groupstatus.R.id;
+import luci.uci.edu.groupstatus.R.layout;
+import luci.uci.edu.groupstatus.R.menu;
 import luci.uci.edu.groupstatus.datastore.StatusDataSource;
 import luci.uci.edu.groupstatus.datastore.StatusObject;
 

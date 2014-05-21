@@ -75,7 +75,8 @@ public class WelcomePage extends Activity {
 			//        	TextView  textView  = (TextView) findViewById(R.id.loginTextView);
 			//        	textView.performClick();
 
-			Intent i = new Intent(WelcomePage.this, StatusCollector.class);
+//			Intent i = new Intent(WelcomePage.this, StatusCollector.class);
+			Intent i = new Intent(WelcomePage.this, CollectStatusAndSensorData.class);
 			startActivity(i);
 		}
 

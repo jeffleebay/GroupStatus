@@ -1,4 +1,4 @@
-package luci.uci.edu.groupstatus;
+package luci.uci.edu.groupstatus.deprecated;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import luci.uci.edu.groupstatus.R;
+import luci.uci.edu.groupstatus.R.id;
+import luci.uci.edu.groupstatus.R.layout;
 import luci.uci.edu.groupstatus.datastore.StatusDataSource;
 
 import org.apache.http.HttpResponse;

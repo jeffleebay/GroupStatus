@@ -1,9 +1,14 @@
-package luci.uci.edu.groupstatus;
+package luci.uci.edu.groupstatus.deprecated;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import luci.uci.edu.groupstatus.R;
+import luci.uci.edu.groupstatus.WelcomePage;
+import luci.uci.edu.groupstatus.R.id;
+import luci.uci.edu.groupstatus.R.layout;
+import luci.uci.edu.groupstatus.R.menu;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
