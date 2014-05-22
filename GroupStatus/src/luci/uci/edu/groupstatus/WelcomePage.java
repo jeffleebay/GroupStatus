@@ -68,34 +68,36 @@ public class WelcomePage extends Activity {
 		final EditText userPW_EditText = (EditText) findViewById(R.id.userPW);
 		final ImageView logIn_imageView = (ImageView) findViewById(R.id.loginArea);
 		final LinearLayout logIn_linearLayout = (LinearLayout) findViewById(R.id.linearLayoutForLogIn);
+
 		
-		userID_EditText.setOnTouchListener(new View.OnTouchListener(){
-	        public boolean onTouch(View view, MotionEvent motionEvent) {                                                       
-	        	findViewById(R.id.welcomeBackground).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_out));
-//	        	findViewById(R.id.linearLayoutForLogIn).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.move_up_for_login_text));
-	        	findViewById(R.id.loginArea).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.move_up_for_login_area));
-	        	findViewById(R.id.loginArea).setAlpha((float) 1.0);
-	        	
-	        	Animation animation = AnimationUtils.loadAnimation(WelcomePage.this, R.anim.move_up_for_login_text);
-	    		animation.setAnimationListener(new AnimationListener() {
-	    		    @Override
-	    		    public void onAnimationEnd(Animation animation) {
-	    		    	getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-	    	            userID_EditText.requestFocus();
-	    		    }
-
-	    		    @Override
-	    		    public void onAnimationStart(Animation animation) {}
-
-	    		    @Override
-	    		    public void onAnimationRepeat(Animation animation) {}
-
-	    		});
-	        	findViewById(R.id.linearLayoutForLogIn).startAnimation(animation);
-	            
-	            return false;
-	       }
-	   });
+		findViewById(R.id.welcomeBackground).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_out));
+       	findViewById(R.id.linearLayoutForLogIn).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
+       	findViewById(R.id.loginArea).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
+		
+//		userID_EditText.setOnTouchListener(new View.OnTouchListener(){
+//	        public boolean onTouch(View view, MotionEvent motionEvent) {                                                       
+//	        	findViewById(R.id.loginArea).setAlpha((float) 1.0);
+//	        	
+//	        	Animation animation = AnimationUtils.loadAnimation(WelcomePage.this, R.anim.move_up_for_login_text);
+//	    		animation.setAnimationListener(new AnimationListener() {
+//	    		    @Override
+//	    		    public void onAnimationEnd(Animation animation) {
+//	    		    	getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//	    	            userID_EditText.requestFocus();
+//	    		    }
+//
+//	    		    @Override
+//	    		    public void onAnimationStart(Animation animation) {}
+//
+//	    		    @Override
+//	    		    public void onAnimationRepeat(Animation animation) {}
+//
+//	    		});
+//	        	findViewById(R.id.linearLayoutForLogIn).startAnimation(animation);
+//	            
+//	            return false;
+//	       }
+//	   });
 		
 		addListenerOnSoftKeyboar(); //listener whether the user presses done/enter
 		addListenerOnTextView(); //act like a button
