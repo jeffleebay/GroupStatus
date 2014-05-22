@@ -42,6 +42,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -352,19 +353,47 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 			mContext = context;
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			locationListener = new MyLocationListener();
-		}
-		
-		protected void onPreExecute() {
+			
+			// getting GPS status
+			Boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-//			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-			locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, locationListener, null);
-			location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//			Log.i("location", location.getLatitude() + "," + location.getLongitude());
-			SensorResult.put("location", location.getLatitude() + "," + location.getLongitude());
+			// getting network status
+			Boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+			if (!isGPSEnabled && !isNetworkEnabled) {
+				// no network provider is enabled
+				Log.i("Network", "No network provider is enabled");
+			} else {
+				if (isNetworkEnabled) {
+					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 10, locationListener);
+					Log.i("Network", "Network Enabled");
+					if (locationManager != null) {
+						location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+					}
+				}
+				if (isGPSEnabled) {
+					if (location == null) {
+						locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
+						Log.i("GPS", "GPS Enabled");
+						if (locationManager != null) {
+							location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+						}
+					}
+				}
+			}
+			
 		}
 
 		@Override
 		protected String doInBackground(Integer... params) {
+			
+			if(location == null) {
+				SensorResult.put("location", "location service disabled");
+				return "null";
+			}
+			
+			SensorResult.put("location", location.getLatitude() + "," + location.getLongitude());
+			
 			Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 			int par = params[0];
 			List<Address> addresses = null;
@@ -402,8 +431,6 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 			asyncTasksProgress++;
 			
 			SensorResult.put("address", address);
-
-//			Log.i("address", address);
 		}
 
 	}
