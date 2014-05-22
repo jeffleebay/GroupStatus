@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sensor_data_collector"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:contentDescription="@string/desc" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/black"
+        android:src="@drawable/application_background" >
+    </ImageView>
+
+    <!-- ======================Status====================== -->
+
+    <RelativeLayout
+        android:id="@+id/status_blocks"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:id="@+id/area_Status"
+            android:layout_width="260dp"
+            android:layout_height="135dp"
+            android:layout_below="@+id/space_Status"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:alpha=".8"
+            android:background="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/area_shadow_buttom_Status"
+            android:layout_width="252dp"
+            android:layout_height="3dp"
+            android:layout_alignLeft="@+id/area_Status"
+            android:layout_below="@+id/area_Status"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            android:alpha=".5"
+            android:background="@android:color/black" />
+
+        <ImageView
+            android:id="@+id/area_shadow_side_Status"
+            android:layout_width="3dp"
+            android:layout_height="132dp"
+            android:layout_alignTop="@+id/area_Status"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@+id/area_Status"
+            android:adjustViewBounds="true"
+            android:alpha=".5"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:id="@+id/space_Status"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:text=" " />
+
+        <LinearLayout
+            android:id="@+id/linearLayout_Status"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/space_Status"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical" >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Status icon"
+                android:src="@drawable/wifi" />
+
+            <TextView
+                android:id="@+id/textView_Status"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:text=" Status "
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider_Status"
+            android:layout_width="240dp"
+            android:layout_height="1dp"
+            android:layout_below="@id/linearLayout_Status"
+            android:layout_centerHorizontal="true"
+            android:background="#999999" />
+
+        <EditText
+            android:id="@+id/EditText_Update_Status"
+            android:layout_width="240dp"
+            android:layout_height="90dp"
+            android:layout_below="@id/divider_Status"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:gravity="left|top"
+            android:hint="Ex. Took a bus to buy groceries in Trader Joes with roommates #lifeexpense #dinner #toohot #universitytowncenter"
+            android:inputType="textMultiLine"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            android:textSize="15sp" >
+        </EditText>
+
+        <!-- Button -->
+
+        <TextView
+            android:id="@+id/Button_Status_Next"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/EditText_Update_Status"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:adjustViewBounds="true"
+            android:alpha=".85"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:text="Next"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
+
+    <!-- ======================GroupStatus====================== -->
+
+    <RelativeLayout
+        android:id="@+id/groupStatus_blocks"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ImageView
+            android:id="@+id/area_GroupStatus"
+            android:layout_width="260dp"
+            android:layout_height="135dp"
+            android:layout_below="@+id/space_GroupStatus"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:alpha=".8"
+            android:background="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/area_shadow_buttom_GroupStatus"
+            android:layout_width="252dp"
+            android:layout_height="3dp"
+            android:layout_alignLeft="@+id/area_GroupStatus"
+            android:layout_below="@+id/area_GroupStatus"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            android:alpha=".5"
+            android:background="@android:color/black" />
+
+        <ImageView
+            android:id="@+id/area_shadow_side_GroupStatus"
+            android:layout_width="3dp"
+            android:layout_height="132dp"
+            android:layout_alignTop="@+id/area_GroupStatus"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@+id/area_GroupStatus"
+            android:adjustViewBounds="true"
+            android:alpha=".5"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:id="@+id/space_GroupStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:text=" " />
+
+        <LinearLayout
+            android:id="@+id/linearLayout_GroupStatus"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/space_GroupStatus"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical" >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="GroupStatus icon"
+                android:src="@drawable/wifi" />
+
+            <TextView
+                android:id="@+id/textView_GroupStatus"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:text=" GroupStatus "
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider_GroupStatus"
+            android:layout_width="240dp"
+            android:layout_height="1dp"
+            android:layout_below="@id/linearLayout_GroupStatus"
+            android:layout_centerHorizontal="true"
+            android:background="#999999" />
+
+        <EditText
+            android:id="@+id/EditText_Update_GroupStatus"
+            android:layout_width="240dp"
+            android:layout_height="90dp"
+            android:layout_below="@id/divider_GroupStatus"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:gravity="left|top"
+            android:hint="Do you want to guess what other are doing now? (Leave it blank and click update to skip this!)"
+            android:inputType="textMultiLine"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            android:textSize="15sp" >
+        </EditText>
+
+        <!-- Button -->
+
+        <TextView
+            android:id="@+id/Button_GroupStatus_Update"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/EditText_Update_GroupStatus"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:adjustViewBounds="true"
+            android:alpha=".85"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:text="Update"
+            android:textSize="19sp" />
+    </RelativeLayout>
+    
+    <!-- ======================Visualization of Sensor Data====================== -->
+    
+    
+    <ScrollView
+        android:id="@+id/visualizationOfSensorData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:scrollbars="none" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <!-- WiFi -->
+
+            <ImageView
+                android:id="@+id/area_WiFi"
+                android:layout_width="260dp"
+                android:layout_height="70dp"
+                android:layout_below="@+id/space_WiFi"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:alpha=".8"
+                android:background="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/area_shadow_buttom_WiFi"
+                android:layout_width="255dp"
+                android:layout_height="3dp"
+                android:layout_alignLeft="@+id/area_WiFi"
+                android:layout_below="@+id/area_WiFi"
+                android:layout_marginLeft="8dp"
+                android:adjustViewBounds="true"
+                android:alpha=".5"
+                android:background="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/area_shadow_side_WiFi"
+                android:layout_width="3dp"
+                android:layout_height="67dp"
+                android:layout_alignTop="@+id/area_WiFi"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/area_WiFi"
+                android:adjustViewBounds="true"
+                android:alpha=".5"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/space_WiFi"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentStart="true"
+                android:text=" " />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_WiFi"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/space_WiFi"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical" >
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="WiFi icon"
+                    android:src="@drawable/wifi" />
+
+                <TextView
+                    android:id="@+id/textView_WiFi"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:text=" WiFi "
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/textView_WiFi_status"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="Updating..."
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider_WiFi"
+                android:layout_width="240dp"
+                android:layout_height="1dp"
+                android:layout_below="@id/linearLayout_WiFi"
+                android:layout_centerHorizontal="true"
+                android:background="#999999" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_progress_WiFi"
+                android:layout_width="240dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/divider_WiFi"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical" >
+
+                <ProgressBar
+                    android:id="@+id/progressBar_WiFi"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="194dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center_vertical" />
+
+                <ImageView
+                    android:id="@+id/progressFinishedIcon_WiFi"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="6dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="progress icon"
+                    android:src="@drawable/checked"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <!-- Noise -->
+
+            <ImageView
+                android:id="@+id/area_Noise"
+                android:layout_width="260dp"
+                android:layout_height="70dp"
+                android:layout_below="@+id/space_Noise"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:alpha=".8"
+                android:background="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/area_shadow_buttom_Noise"
+                android:layout_width="255dp"
+                android:layout_height="3dp"
+                android:layout_alignLeft="@+id/area_Noise"
+                android:layout_below="@+id/area_Noise"
+                android:layout_marginLeft="8dp"
+                android:adjustViewBounds="true"
+                android:alpha=".5"
+                android:background="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/area_shadow_side_Noise"
+                android:layout_width="3dp"
+                android:layout_height="67dp"
+                android:layout_alignTop="@+id/area_Noise"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/area_Noise"
+                android:adjustViewBounds="true"
+                android:alpha=".5"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/space_Noise"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_below="@+id/linearLayout_progress_WiFi"
+                android:text=" " />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_Noise"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/space_Noise"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical" >
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="Noise icon"
+                    android:src="@drawable/noise" />
+
+                <TextView
+                    android:id="@+id/textView_Noise"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:text=" Noise "
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/textView_Noise_status"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="Updating..."
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider_Noise"
+                android:layout_width="240dp"
+                android:layout_height="1dp"
+                android:layout_below="@id/linearLayout_Noise"
+                android:layout_centerHorizontal="true"
+                android:background="#999999" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_progress_Noise"
+                android:layout_width="240dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/divider_Noise"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical" >
+
+                <ProgressBar
+                    android:id="@+id/progressBar_Noise"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="194dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center_vertical" />
+
+                <ImageView
+                    android:id="@+id/progressFinishedIcon_Noise"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="6dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="progress icon"
+                    android:src="@drawable/checked"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <!-- Location -->
+
+            <ImageView
+                android:id="@+id/area_Location"
+                android:layout_width="260dp"
+                android:layout_height="70dp"
+                android:layout_below="@+id/space_Location"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:alpha=".8"
+                android:background="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/area_shadow_buttom_Location"
+                android:layout_width="255dp"
+                android:layout_height="3dp"
+                android:layout_alignLeft="@+id/area_Location"
+                android:layout_below="@+id/area_Location"
+                android:layout_marginLeft="8dp"
+                android:adjustViewBounds="true"
+                android:alpha=".5"
+                android:background="@android:color/black" />
+
+            <ImageView
+                android:id="@+id/area_shadow_side_Location"
+                android:layout_width="3dp"
+                android:layout_height="67dp"
+                android:layout_alignTop="@+id/area_Location"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/area_Location"
+                android:adjustViewBounds="true"
+                android:alpha=".5"
+                android:background="@android:color/black" />
+
+            <TextView
+                android:id="@+id/space_Location"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_below="@+id/linearLayout_progress_Noise"
+                android:text=" " />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_Location"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/space_Location"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical" >
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="Location icon"
+                    android:src="@drawable/location" />
+
+                <TextView
+                    android:id="@+id/textView_Location"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="1dp"
+                    android:text=" Location "
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/textView_Location_status"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:text="Updating..."
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider_Location"
+                android:layout_width="240dp"
+                android:layout_height="1dp"
+                android:layout_below="@id/linearLayout_Location"
+                android:layout_centerHorizontal="true"
+                android:background="#999999" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_progress_Location"
+                android:layout_width="240dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/divider_Location"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical" >
+
+                <ProgressBar
+                    android:id="@+id/progressBar_Location"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="194dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="4dp"
+                    android:gravity="center_vertical" />
+
+                <ImageView
+                    android:id="@+id/progressFinishedIcon_Location"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="6dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="progress icon"
+                    android:src="@drawable/checked"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <!-- Button -->
+
+            <ImageView
+                android:id="@+id/Button_Sensor_Upload"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/space_Button"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:alpha=".85"
+                android:background="@android:color/white" />
+
+            <TextView
+                android:id="@+id/space_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/linearLayout_progress_Location"
+                android:text=" " />
+
+            <TextView
+                android:id="@+id/textView_ReportButton"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_below="@+id/space_Button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp"
+                android:text="Upload  "
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/black" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_spinner_Upload"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textView_ReportButton"
+                android:layout_alignLeft="@+id/textView_ReportButton"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="165dp"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/imageView_checked_Upload"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignTop="@+id/textView_ReportButton"
+                android:layout_alignLeft="@+id/textView_ReportButton"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="165dp"
+                android:src="@drawable/checked"
+                android:visibility="invisible" />
+
+ 
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

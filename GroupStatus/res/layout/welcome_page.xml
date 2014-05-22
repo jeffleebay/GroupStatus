@@ -4,50 +4,50 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:contentDescription="@string/desc" >
+    
+
 
     <ImageView
+        android:id="@+id/applicationBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         android:background="@android:color/black"
-        android:src="@drawable/welcome_background_up" >
-
-        <!--
-	    android:adjustViewBounds="false"
-	    android:scaleType="fitXY"         -->
-        <!--
-	    android:adjustViewBounds="true"
-	    delete -> android:scaleType="fitXY"         -->
-
-    </ImageView>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:src="@drawable/application_background" />
+    
+    <ImageView
+        android:id="@+id/welcomeBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_alignTop="@+id/linearLayoutForLogIn" >
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@android:color/black"
+        android:src="@drawable/welcome_background_up" />
+
         
-       	<ImageView
-	        android:id="@+id/loginArea"
-	        android:layout_width="170dp"
-	        android:layout_height="140dp"
-	        android:adjustViewBounds="true"
-	        android:alpha=".5"
-	        android:background="@android:color/white" >
-        
-    </ImageView>
-    </RelativeLayout>
+	<ImageView
+	     android:id="@+id/loginArea"
+	     android:layout_width="170dp"
+	     android:layout_height="140dp"
+	     android:layout_centerHorizontal="true"
+	     android:layout_alignTop="@+id/linearLayoutForLogIn"
+	     android:adjustViewBounds="true"
+	     android:alpha=".5"
+	     android:background="@android:color/white" />
 
     <LinearLayout
         android:id="@+id/linearLayoutForLogIn"
         android:layout_width="120dp"
-        android:layout_height="250dp"
+        android:layout_height="140dp"
+        android:layout_marginBottom="110dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:orientation="vertical" 
-        android:gravity="center_horizontal" >
+        android:gravity="center_horizontal" 
+        android:focusableInTouchMode="true">
        	
         <TextView
             android:id="@+id/space"
@@ -90,7 +90,6 @@
 
     </LinearLayout>
 
-    
 
 </RelativeLayout>
 <!-- android:layout_centerVertical="true" -->

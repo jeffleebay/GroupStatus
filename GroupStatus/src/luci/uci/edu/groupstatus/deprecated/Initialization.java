@@ -1,9 +1,13 @@
-package luci.uci.edu.groupstatus;
+package luci.uci.edu.groupstatus.deprecated;
 
 import java.util.Calendar;
+
+import luci.uci.edu.groupstatus.CollectStatusAndSensorData;
+import luci.uci.edu.groupstatus.R;
+import luci.uci.edu.groupstatus.R.id;
+import luci.uci.edu.groupstatus.R.layout;
 import luci.uci.edu.groupstatus.datastore.StatusDataSource;
 import luci.uci.edu.groupstatus.notification.NotificationPublisher;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -56,7 +60,7 @@ public class Initialization extends Activity {
 
 	public void setNotificationsForTesting() {
 
-		int minutes = 1; //remind the user every 5 minutes
+		int minutes = 5; //remind the user every 5 minutes
 
 		getBaseContext();
 		AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);

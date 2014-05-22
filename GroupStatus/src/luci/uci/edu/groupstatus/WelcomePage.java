@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import luci.uci.edu.groupstatus.deprecated.StatusCollector;
 import luci.uci.edu.groupstatus.notification.NotificationPublisher;
 
 import org.apache.http.HttpResponse;
@@ -36,12 +37,24 @@ import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.EditorInfo;
 
 public class WelcomePage extends Activity {
 
@@ -49,8 +62,42 @@ public class WelcomePage extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome_page);
+		
+		
+		final EditText userID_EditText = (EditText) findViewById(R.id.userID);
+		final EditText userPW_EditText = (EditText) findViewById(R.id.userPW);
+		final ImageView logIn_imageView = (ImageView) findViewById(R.id.loginArea);
+		final LinearLayout logIn_linearLayout = (LinearLayout) findViewById(R.id.linearLayoutForLogIn);
+		
+		userID_EditText.setOnTouchListener(new View.OnTouchListener(){
+	        public boolean onTouch(View view, MotionEvent motionEvent) {                                                       
+	        	findViewById(R.id.welcomeBackground).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_out));
+//	        	findViewById(R.id.linearLayoutForLogIn).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.move_up_for_login_text));
+	        	findViewById(R.id.loginArea).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.move_up_for_login_area));
+	        	findViewById(R.id.loginArea).setAlpha((float) 1.0);
+	        	
+	        	Animation animation = AnimationUtils.loadAnimation(WelcomePage.this, R.anim.move_up_for_login_text);
+	    		animation.setAnimationListener(new AnimationListener() {
+	    		    @Override
+	    		    public void onAnimationEnd(Animation animation) {
+	    		    	getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+	    	            userID_EditText.requestFocus();
+	    		    }
 
-		addListenerOnEditText(); //listener whether the user presses done/enter
+	    		    @Override
+	    		    public void onAnimationStart(Animation animation) {}
+
+	    		    @Override
+	    		    public void onAnimationRepeat(Animation animation) {}
+
+	    		});
+	        	findViewById(R.id.linearLayoutForLogIn).startAnimation(animation);
+	            
+	            return false;
+	       }
+	   });
+		
+		addListenerOnSoftKeyboar(); //listener whether the user presses done/enter
 		addListenerOnTextView(); //act like a button
 
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -65,17 +112,10 @@ public class WelcomePage extends Activity {
 		String userPW = settings.getString("userPWforGroupStatus", "n/a");
 
 		if (!userID.equals("n/a") && !userPW.equals("n/a")) {
-			EditText userID_EditText = (EditText) findViewById(R.id.userID);
-			EditText userPW_EditText = (EditText) findViewById(R.id.userPW);
 			userID_EditText.setText(userID);
 			userPW_EditText.setText(userPW);
 
-			//in case there is no Internet connection
-
-			//        	TextView  textView  = (TextView) findViewById(R.id.loginTextView);
-			//        	textView.performClick();
-
-//			Intent i = new Intent(WelcomePage.this, StatusCollector.class);
+			//once the user is already logged in
 			Intent i = new Intent(WelcomePage.this, CollectStatusAndSensorData.class);
 			startActivity(i);
 		}
@@ -139,23 +179,21 @@ public class WelcomePage extends Activity {
 		});
 	}
 
-	public void addListenerOnEditText() {
+	public void addListenerOnSoftKeyboar() {
 
 		final TextView textView = (TextView) findViewById(R.id.loginTextView);
 		final EditText editText = (EditText) findViewById(R.id.userPW);
-		editText.setOnKeyListener(new View.OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
+		
+		editText.setOnEditorActionListener(new OnEditorActionListener() {
 
-				if (KeyEvent.KEYCODE_ENTER == keyCode) {
-
-					textView.performClick();
-
-					return true; // indicate that we handled event, won't propagate it
-				}
-				return false; // when we don't handle other keys, propagate event further
-			}
-		});
+	           @Override
+	           public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+	               if (actionId == EditorInfo.IME_ACTION_DONE) {
+	            	   textView.performClick();
+	               }
+	               return false;
+	           }
+	       });
 
 	}
 
@@ -225,19 +263,33 @@ public class WelcomePage extends Activity {
 			if (dialog.isShowing()) {
 				dialog.dismiss();
 			}
-			
-			String group = result.substring(result.indexOf(":")+1);
 
 			if (result.startsWith("successfully logged in")) {
+
+				String group = getParameter("Group", result);
+				String type = getParameter("type", result);
+				String startingDate = getParameter("startingDate", result);
+				String timeInterval = getParameter("timeInterval", result);
 
 				Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
 				edit.putString("userIDforGroupStatus", userID);
 				edit.putString("userPWforGroupStatus", userPW);
 				edit.putString("groupUserBelondedTo", group);
+				edit.putString("typeOfTheParticipant", type);
 				edit.clear(); //I know this is redundant... 
 				edit.apply();
 
-				Intent i = new Intent(WelcomePage.this, Initialization.class);
+				
+				if(type.equals("testing")){
+					setNotificationsForTesting();
+				}else if(type.equals("experiment")){
+					int month = Integer.parseInt(startingDate.substring(0, 2));
+					int date = Integer.parseInt(startingDate.substring(2));
+					int days = Integer.parseInt(timeInterval);
+					setNotificationsForExperiment(month, date, days);				
+				}
+				
+				Intent i = new Intent(WelcomePage.this, CollectStatusAndSensorData.class);
 				startActivity(i);
 
 			} else {
@@ -246,6 +298,60 @@ public class WelcomePage extends Activity {
 				toast.show();
 			}
 
+		}
+	}
+	
+	String getParameter(String parameter, String input){
+
+		int indexOfParameter = input.indexOf(parameter);
+		int indexOfValue = indexOfParameter + parameter.length() + 1;
+		int indexOfNextSemicolon = input.indexOf(";", indexOfValue);
+		if(indexOfParameter == -1 || indexOfNextSemicolon == -1) return "null value";
+		
+		return input.substring(indexOfValue, indexOfNextSemicolon);
+		
+	}
+
+	public void setNotificationsForTesting() {
+
+		int minutes = 5; //remind the user every 5 minutes
+
+		getBaseContext();
+		AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(this, NotificationPublisher.class);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+
+		for (int i = 1; i <= 5; i++) {
+			calendar.add(Calendar.MINUTE, minutes * i);
+			int currentTime = (int) System.currentTimeMillis(); //use the current time as id
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), currentTime, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+		}
+	}
+
+	public void setNotificationsForExperiment(int month, int date, int days) {
+
+		int experimentHour[] = { 9, 12, 15, 18, 21 };
+
+		getBaseContext();
+		AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(this, NotificationPublisher.class);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.set(Calendar.MONTH, month);
+		calendar.set(Calendar.DATE, date);
+
+		for (int i = 0; i < experimentHour.length; i++) {
+			calendar.set(Calendar.HOUR_OF_DAY, experimentHour[0]);
+			for (int j = 0; j < days; j++) {
+				calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + j);
+				int currentTime = (int) System.currentTimeMillis(); //use the current time as id
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), currentTime, intent,
+						PendingIntent.FLAG_UPDATE_CURRENT);
+				alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+			}
 		}
 	}
 
