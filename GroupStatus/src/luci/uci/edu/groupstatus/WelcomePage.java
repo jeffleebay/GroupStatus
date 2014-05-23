@@ -185,7 +185,7 @@ public class WelcomePage extends Activity {
 		}
 
 		protected void onPreExecute() {
-			this.dialog.setMessage("Connecting to the server");
+			this.dialog.setMessage("Logging to the server.");
 			this.dialog.show();
 			try {
 				Thread.sleep(100);

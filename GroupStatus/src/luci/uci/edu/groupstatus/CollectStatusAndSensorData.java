@@ -745,13 +745,11 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 					ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
 					imageView_checked_Upload.setVisibility(View.VISIBLE);
 					
-					final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded. Time to get back to real life.", Toast.LENGTH_SHORT);
+					final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded. Time to get back to real life!", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 100);
 					toast.show();
 				}
 				statusDataSource.close();
-				
-	    		
 		    	
 	    	}else{
 	    		Toast toast = Toast.makeText(getApplicationContext(),"Upload error. The status and data are stored to the local database.", Toast.LENGTH_SHORT);
