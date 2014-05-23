@@ -101,7 +101,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:gravity="left|top"
-            android:hint="Ex. Took a bus to buy groceries in Trader Joes with roommates #lifeexpense #dinner #toohot #universitytowncenter"
+            android:hint=""
             android:inputType="textMultiLine"
             android:scrollbarStyle="outsideOverlay"
             android:scrollbars="vertical"

@@ -128,6 +128,12 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 		findViewById(R.id.textView_ReportButton).setVisibility(View.INVISIBLE);
 		findViewById(R.id.Button_Sensor_Upload).setVisibility(View.INVISIBLE);
 		
+		//Set hint Text
+		EditText etStatus = (EditText) findViewById(R.id.EditText_Update_Status);
+		etStatus.setHint("What are you doing now?\nEx. Taking a bus to buy groceries in Trader Joes with roommates #lifeexpense #dinner #toohot #universitytowncenter");
+		EditText etGroupStatus = (EditText) findViewById(R.id.EditText_Update_GroupStatus);
+		etGroupStatus.setHint("Guess what others are doing now?\nLeave it blank and click Update if you don't want to.");
+		
 		//Set Buttons
 		final TextView tvNext = (TextView) findViewById(R.id.Button_Status_Next);
 		tvNext.setOnClickListener(this);
@@ -739,7 +745,7 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 					ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
 					imageView_checked_Upload.setVisibility(View.VISIBLE);
 					
-					final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded", Toast.LENGTH_SHORT);
+					final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded. Time to get back to real life.", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 100);
 					toast.show();
 				}
