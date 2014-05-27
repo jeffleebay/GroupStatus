@@ -241,15 +241,15 @@ public class WelcomePage extends Activity {
 
 			if (result.startsWith("successfully logged in")) {
 
-				String group = getParameter("Group", result);
+				String group = getParameter("group", result);
 				String type = getParameter("type", result);
 				String startingDate = getParameter("startingDate", result);
 				String timeInterval = getParameter("timeInterval", result);
-				
+
 				Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
 				edit.putString("userIDforGroupStatus", userID);
 				edit.putString("userPWforGroupStatus", userPW);
-				edit.putString("groupUserBelondedTo", group);
+				edit.putString("groupUserBelongedTo", group);
 				edit.putString("typeOfTheParticipant", type);
 				edit.clear(); //I know this is redundant... 
 				edit.apply();

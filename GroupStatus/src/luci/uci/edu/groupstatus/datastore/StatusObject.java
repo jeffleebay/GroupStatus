@@ -12,13 +12,14 @@ public class StatusObject {
 	private String noiseLevel;
 	private String location;
 	private String address;
+	private int uploaded;		// there is no native boolean type in sqlite
 	
 	public StatusObject() {
 		super();
 	}
 	
 	public StatusObject(String userID, String group, String timestamp, String status, 
-			String groupStatus, String wifiList, String noiseLevel, String location, String address) {
+			String groupStatus, String wifiList, String noiseLevel, String location, String address, int uploaded) {
 		this.userID = userID;
 		this.group = group;
 		this.timestamp = timestamp;
@@ -28,6 +29,7 @@ public class StatusObject {
 		this.noiseLevel = noiseLevel;
 		this.location = location;
 		this.address = address;
+		this.uploaded = uploaded;
 	}
 
 	public Long getId() {
@@ -107,6 +109,14 @@ public class StatusObject {
 	
 	public void setAddress(String address) {
 		this.address = address;
+	}	
+	
+	public int getUploaded() {
+		return uploaded;
+	}
+	
+	public void setUploaded(int uploaded) {
+		this.uploaded = uploaded;
 	}	
 
 }

@@ -24,6 +24,7 @@ public class StatusDataSource {
 				MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_NOISELEVEL, 
 				MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_LOCATION, 
 				MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_ADDRESS, 
+				MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_UPLOADED, 
 				};
 
 		public StatusDataSource(Context context) {
@@ -39,7 +40,7 @@ public class StatusDataSource {
 		}
 
 		public StatusObject createAStatusObject(String userID, String group, String timestamp, String status, 
-				String groupStatus, String wifiList, String noiseLevel, String location, String address) {
+				String groupStatus, String wifiList, String noiseLevel, String location, String address, int uploaded) {
 			ContentValues values = new ContentValues();
 			values.put(MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_USERID, userID);
 			values.put(MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_GROUP, group);
@@ -50,6 +51,7 @@ public class StatusDataSource {
 			values.put(MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_NOISELEVEL, noiseLevel);
 			values.put(MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_LOCATION, location);
 			values.put(MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_ADDRESS, address);
+			values.put(MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_UPLOADED, uploaded);
 			
 			
 			long insertId = database.insert(MySQLiteHelper.TABLE_GROUPSTATUS, null, values);
@@ -66,24 +68,43 @@ public class StatusDataSource {
 
 		public void deleteAStatusObject(StatusObject StatusObject) {
 			long id = StatusObject.getId();
-//			System.out.println("A message deleted with id: " + id);
 			database.delete(MySQLiteHelper.TABLE_GROUPSTATUS,
 					MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_ID + " = " + id, null);
+		}
+		
+		public void updateAJustUploadedStatusObject(StatusObject StatusObject) {
+			long id = StatusObject.getId();
+//			System.out.println("A message deleted with id: " + id);
+			ContentValues values = new ContentValues();
+			values.put(MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_UPLOADED, 1);
+			database.update(MySQLiteHelper.TABLE_GROUPSTATUS, values, MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_ID + " = " + id, null);
 		}
 		
 		public List<StatusObject> getAllStatusObjects() {
 			List<StatusObject> listOfMessages = new ArrayList<StatusObject>();
 
 			Cursor cursor = database.query(MySQLiteHelper.TABLE_GROUPSTATUS,allColumns, null, null, null, null, null);
-
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
 				StatusObject statusObject = cursorToStatus(cursor);
 				listOfMessages.add(statusObject);
 				cursor.moveToNext();
 			}
-			// Make sure to close the cursor
-			cursor.close();
+			cursor.close();						// Make sure to close the cursor
+			return listOfMessages;
+		}
+		
+		public List<StatusObject> getAllNotUploadedYetStatusObjects() {
+			List<StatusObject> listOfMessages = new ArrayList<StatusObject>();
+			
+			Cursor cursor = database.query(MySQLiteHelper.TABLE_GROUPSTATUS,allColumns, MySQLiteHelper.TABLE_GROUPSTATUS_COLUMN_UPLOADED + " = 0", null, null, null, null);
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				StatusObject statusObject = cursorToStatus(cursor);
+				listOfMessages.add(statusObject);
+				cursor.moveToNext();
+			}
+			cursor.close();						// Make sure to close the cursor
 			return listOfMessages;
 		}
 
@@ -99,6 +120,7 @@ public class StatusDataSource {
 			StatusObject.setNoiseLevel(cursor.getString(7));
 			StatusObject.setLocation(cursor.getString(8));
 			StatusObject.setAddress(cursor.getString(9));
+			StatusObject.setUploaded(Integer.parseInt(cursor.getString(10)));
 			return StatusObject;
 		}
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -185,10 +186,10 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 		
 		// Vars for WiFi
 		wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-		if (wifi.isWifiEnabled() == false) {
-			Toast.makeText(getApplicationContext(), "Wifi was disabled. Enabling now...", Toast.LENGTH_LONG).show();
-			wifi.setWifiEnabled(true);
-		}
+//		if (wifi.isWifiEnabled() == false) {
+//			Toast.makeText(getApplicationContext(), "Wifi was disabled. Enabling now...", Toast.LENGTH_LONG).show();
+//			wifi.setWifiEnabled(true);
+//		}
 
 		wifiBroadcastReceiver = new BroadcastReceiver() {
 			@Override
@@ -409,6 +410,11 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			if(addresses==null){
+				return "No wifi/network connection";
+			}
+			
 			if (addresses.size() > 0) {
 
 				Address address = addresses.get(0);
@@ -418,7 +424,7 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 						address.getCountryName(), // The country of the address
 						address.getPostalCode());
 			} else {
-				addressText = "; No address found";
+				addressText = "No address found";
 			}
 			return addressText;
 		}
@@ -679,11 +685,11 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 			//Add user information
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 			String userID = settings.getString("userIDforGroupStatus", "n/a");
-			String group = settings.getString("groupUserBelondedTo", "n/a");
+			String group = settings.getString("groupUserBelongedTo", "n/a");
 
 			nameValuePairs.add(new BasicNameValuePair("userID", userID));
 			nameValuePairs.add(new BasicNameValuePair("group", group));
-
+			
 			//Add time stamp
 			Time today = new Time(Time.getCurrentTimezone());
 			today.setToNow();
@@ -725,39 +731,53 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 	    	if (dialog.isShowing()) {
 	            dialog.dismiss();
 	        }
-	    	
+
 	    	progressBar_spinner_Upload.setVisibility(View.INVISIBLE);
+	    	
+	    	statusDataSource.open();
 	    	
 	    	if(result.endsWith("success")){	 
 	    		
-				statusDataSource.open();
-				List<StatusObject> listOfStatusObjects = statusDataSource.getAllStatusObjects();
+				
+				List<StatusObject> listOfNotUploadedYetStatusObjects = statusDataSource.getAllNotUploadedYetStatusObjects();
 	    		
 				//check if there is any stored in the database
-				if (!listOfStatusObjects.isEmpty()) {
-					for (int i = 0; i < listOfStatusObjects.size(); i++) {
-						StatusObject statusObject = listOfStatusObjects.get(i);
-						UploadFromDBToServer uploadFromDBToServer = new UploadFromDBToServer(CollectStatusAndSensorData.this);
+				if (!listOfNotUploadedYetStatusObjects.isEmpty()) {
+					int numberOfNotUploadedYetObject = listOfNotUploadedYetStatusObjects.size();
+					for (int i = 0; i < numberOfNotUploadedYetObject; i++) {
+						StatusObject statusObject = listOfNotUploadedYetStatusObjects.get(i);
+						UploadFromDBToServer uploadFromDBToServer = new UploadFromDBToServer(CollectStatusAndSensorData.this, i+1, numberOfNotUploadedYetObject);
 						uploadFromDBToServer.execute(statusObject);
-						statusDataSource.deleteAStatusObject(statusObject);
+						
+						//the get method would block the UI thread but I don't have time to implement the solution to avoid the issue that
+						//the database would be opened by different parallel aysnctasks at the same time if  
+						
+						Boolean uploadFlag = false;
+						
+						try {
+							uploadFlag=uploadFromDBToServer.get().endsWith("success"); 
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							e.printStackTrace();
+						} 
+						
+						if(uploadFlag){
+							statusDataSource.updateAJustUploadedStatusObject(statusObject);
+							Log.i("database", "updated");
+							final Toast toast = Toast.makeText(getApplicationContext(),"Successfully upload all statuses.", Toast.LENGTH_SHORT);
+							toast.show();
+						}
+						
 					}
 				}else{					
 					ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
 					imageView_checked_Upload.setVisibility(View.VISIBLE);
 					
-					final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded. Time to get back to real life!", Toast.LENGTH_SHORT);
-					toast.setGravity(Gravity.CENTER, 0, 100);
+					final Toast toast = Toast.makeText(getApplicationContext(),"Successfully upload the status.", Toast.LENGTH_SHORT);
 					toast.show();
 				}
-				statusDataSource.close();
-		    	
-	    	}else{
-	    		Toast toast = Toast.makeText(getApplicationContext(),"Upload error. The status and data are stored to the local database.", Toast.LENGTH_SHORT);
-	    		toast.setGravity(Gravity.CENTER, 0, 100);
-		    	toast.show();
-		    	
-
-				statusDataSource.open();
+				
 				statusDataSource.createAStatusObject(
 						nameValuePairs.get(1).getValue(),
 						nameValuePairs.get(2).getValue(),
@@ -767,10 +787,25 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 						nameValuePairs.get(6).getValue(),
 						nameValuePairs.get(7).getValue(),
 						nameValuePairs.get(8).getValue(),
-						nameValuePairs.get(9).getValue());
-				statusDataSource.close();
+						nameValuePairs.get(9).getValue(), 1);	//1 = true = uploaded
 		    	
+	    	}else{
+	    		Toast toast = Toast.makeText(getApplicationContext(),"Upload error. The status and data are stored to the local database.", Toast.LENGTH_SHORT);
+		    	toast.show();
+		    	
+
+				statusDataSource.createAStatusObject(
+						nameValuePairs.get(1).getValue(),
+						nameValuePairs.get(2).getValue(),
+						nameValuePairs.get(3).getValue(),
+						nameValuePairs.get(4).getValue(),
+						nameValuePairs.get(5).getValue(),
+						nameValuePairs.get(6).getValue(),
+						nameValuePairs.get(7).getValue(),
+						nameValuePairs.get(8).getValue(),
+						nameValuePairs.get(9).getValue(), 0);  //0 = false = not uploaded yet
 	    	}
+	    	statusDataSource.close();
 		    	
 	    }
 	  }	
@@ -781,21 +816,24 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 		Context context; // application context.
 		ProgressBar progressBar_spinner_Upload;
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		int theOrderOfThisObject = 0;
+		int totalNotUploadedYetObjects = 0;
 		
 		
-		public UploadFromDBToServer(Activity activity) {
+		public UploadFromDBToServer(Activity activity, int theOrderOfThisObject, int totalNotUploadedYetObjects) {
 			context = activity;
 			dialog = new ProgressDialog(context);
+			this.theOrderOfThisObject = theOrderOfThisObject;
+			this.totalNotUploadedYetObjects = totalNotUploadedYetObjects;
 		}
 		
 		protected void onPreExecute() {
-			this.dialog.setMessage("Uploading previous statuses to the server");
+			String dialogText = "Uploading previous collected statuses to the server" + Integer.toString(theOrderOfThisObject) + " of " + Integer.toString(totalNotUploadedYetObjects); 
+//			String dialogText = "Uploading previous collected statuses to the server"; 
+			this.dialog.setMessage(dialogText);
+			this.dialog.setIndeterminate(true);
+			this.dialog.setCancelable(false);
 			this.dialog.show();
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			
 			progressBar_spinner_Upload = (ProgressBar) findViewById(R.id.progressBar_spinner_Upload);
 			progressBar_spinner_Upload.setVisibility(View.VISIBLE);
@@ -820,7 +858,7 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 			nameValuePairs.add(new BasicNameValuePair("noiseLevel", statusObject.getNoiseLevel()));
 			nameValuePairs.add(new BasicNameValuePair("location", statusObject.getLocation()));
 			nameValuePairs.add(new BasicNameValuePair("address", statusObject.getAddress()));
-
+			
 			try {
 				httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			} catch (UnsupportedEncodingException e1) {
@@ -852,22 +890,6 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 			}
 			
 			progressBar_spinner_Upload.setVisibility(View.INVISIBLE);
-			
-			if(result.endsWith("success")){	    		
-				 
-				ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
-				imageView_checked_Upload.setVisibility(View.VISIBLE);
-				
-				final Toast toast = Toast.makeText(getApplicationContext(),"Successfully Uploaded", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 100);
-				toast.show();
-				
-			}else{
-				Toast toast = Toast.makeText(getApplicationContext(),"Upload error. The status and data are stored to the local database.", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, 100);
-				toast.show();
-				
-			}
 			
 		}
 	}	

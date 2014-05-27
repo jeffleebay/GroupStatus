@@ -744,7 +744,7 @@ public class SensorDataCollector extends Activity implements OnClickListener {
 						nameValuePairs.get(6).getValue(),
 						nameValuePairs.get(7).getValue(),
 						nameValuePairs.get(8).getValue(),
-						nameValuePairs.get(9).getValue());
+						nameValuePairs.get(9).getValue(), 0);
 				statusDataSource.close();
 		    	
 	    	}

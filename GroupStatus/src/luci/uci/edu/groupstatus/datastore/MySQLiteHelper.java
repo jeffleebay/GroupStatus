@@ -21,6 +21,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	public static final String TABLE_GROUPSTATUS_COLUMN_NOISELEVEL = "noiseLevel";
 	public static final String TABLE_GROUPSTATUS_COLUMN_LOCATION = "location";
 	public static final String TABLE_GROUPSTATUS_COLUMN_ADDRESS = "address";
+	public static final String TABLE_GROUPSTATUS_COLUMN_UPLOADED = "uploaded";
 	
 
 	private static final String DATABASE_CREATE_TABLE_GROUPSTATUS = "CREATE TABLE IF NOT EXISTS "
@@ -35,7 +36,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			+ TABLE_GROUPSTATUS_COLUMN_WIFILIST + " TEXT NOT NULL , "
 			+ TABLE_GROUPSTATUS_COLUMN_NOISELEVEL + " TEXT NOT NULL , "
 			+ TABLE_GROUPSTATUS_COLUMN_LOCATION + " TEXT NOT NULL , "
-			+ TABLE_GROUPSTATUS_COLUMN_ADDRESS + " TEXT NOT NULL"
+			+ TABLE_GROUPSTATUS_COLUMN_ADDRESS + " TEXT NOT NULL , "
+			+ TABLE_GROUPSTATUS_COLUMN_UPLOADED + " INT NOT NULL"
 			+ " );";
 
 	public MySQLiteHelper(Context context) {
