@@ -96,6 +96,24 @@ public class WelcomePage extends Activity {
 		}
 
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+//		startActivity(new Intent(WelcomePage.this, WelcomePage.class));
+		findViewById(R.id.welcomeBackground).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_out));
+       	findViewById(R.id.linearLayoutForLogIn).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
+       	findViewById(R.id.loginArea).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
+       	addListenerOnSoftKeyboar(); //listener whether the user presses done/enter
+		addListenerOnTextView(); //act like a button
+
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+		if (!enabled) {
+			showSettingsAlert(WelcomePage.this);
+		}
+	}
 
 	public void showSettingsAlert(final Context mContext) {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
