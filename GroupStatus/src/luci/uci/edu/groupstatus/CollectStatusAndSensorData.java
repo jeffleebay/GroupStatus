@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -45,10 +46,12 @@ import android.preference.PreferenceManager;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -243,6 +246,7 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 	@Override
 	public void onPause() {
 		super.onPause();
+		mSensor.stop();
 	}
 
 	@Override
@@ -253,6 +257,11 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 	@Override
 	public void onStop() {
 		super.onStop();
+		
+		//if the status is uploaded
+		TextView textView_Upload_Button = (TextView) findViewById(R.id.textView_ReportButton);
+		if(textView_Upload_Button.getAlpha()== (float) 0.98)
+			finish();			
 	}
 	
 	@Override
@@ -264,7 +273,6 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
-		this.finish();
 	}
 
 	public void onClick(View view) {
@@ -272,8 +280,6 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 		EditText tvStatus = (EditText) findViewById(R.id.EditText_Update_Status);
 		EditText tvGroupStatus = (EditText) findViewById(R.id.EditText_Update_GroupStatus);
 		
-		
-
 		switch (view.getId()) {
 		case R.id.Button_Status_Next:
 			
@@ -771,12 +777,34 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 						
 					}
 				}else{					
-					ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
-					imageView_checked_Upload.setVisibility(View.VISIBLE);
 					
 					final Toast toast = Toast.makeText(getApplicationContext(),"Successfully upload the status.", Toast.LENGTH_SHORT);
 					toast.show();
 				}
+				
+				//Toast Information
+				LayoutInflater inflater = getLayoutInflater();
+				View layout = inflater.inflate(R.layout.toast_layout,(ViewGroup) findViewById(R.id.toast_layout_root));
+
+				TextView text1 = (TextView) layout.findViewById(R.id.text1);
+				text1.setText(" Click me to leave ");
+				TextView text2 = (TextView) layout.findViewById(R.id.text2);
+				text2.setText("↓");
+
+				Toast toast = new Toast(getApplicationContext());
+				toast.setGravity(Gravity.BOTTOM, 0, 0);
+				toast.setDuration(Toast.LENGTH_LONG);
+				toast.setView(layout);
+				toast.show();
+				
+				//Change UI
+				ImageView imageView_Upload_Button = (ImageView) findViewById(R.id.Button_Sensor_Upload);
+				imageView_Upload_Button.setEnabled(false); 
+				TextView textView_Upload_Button = (TextView) findViewById(R.id.textView_ReportButton);
+				textView_Upload_Button.setTextColor(Color.GRAY);
+				textView_Upload_Button.setAlpha((float) 0.98);
+				ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
+				imageView_checked_Upload.setVisibility(View.VISIBLE);
 				
 				statusDataSource.createAStatusObject(
 						nameValuePairs.get(1).getValue(),
@@ -806,7 +834,6 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 						nameValuePairs.get(9).getValue(), 0);  //0 = false = not uploaded yet
 	    	}
 	    	statusDataSource.close();
-		    	
 	    }
 	  }	
 	

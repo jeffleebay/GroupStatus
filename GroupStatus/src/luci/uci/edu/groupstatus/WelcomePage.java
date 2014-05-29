@@ -64,47 +64,11 @@ public class WelcomePage extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.welcome_page);
 		
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		String userID = settings.getString("userIDforGroupStatus", "n/a");
-		String userPW = settings.getString("userPWforGroupStatus", "n/a");
-		
-		final EditText userID_EditText = (EditText) findViewById(R.id.userID);
-		final EditText userPW_EditText = (EditText) findViewById(R.id.userPW);
-		
-		if (!userID.equals("n/a") && !userPW.equals("n/a")) {
-			userID_EditText.setText(userID);
-			userPW_EditText.setText(userPW);
-
-			//once the user is already logged in
-			Intent i = new Intent(WelcomePage.this, CollectStatusAndSensorData.class);
-			startActivity(i);
-		}else{
-		
-			findViewById(R.id.welcomeBackground).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_out));
-	       	findViewById(R.id.linearLayoutForLogIn).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
-	       	findViewById(R.id.loginArea).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
-			
-			addListenerOnSoftKeyboar(); //listener whether the user presses done/enter
-			addListenerOnTextView(); //act like a button
-	
-			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-			boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	
-			if (!enabled) {
-				showSettingsAlert(WelcomePage.this);
-			}
-		}
-
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-//		startActivity(new Intent(WelcomePage.this, WelcomePage.class));
 		findViewById(R.id.welcomeBackground).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_out));
        	findViewById(R.id.linearLayoutForLogIn).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
        	findViewById(R.id.loginArea).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
-       	addListenerOnSoftKeyboar(); //listener whether the user presses done/enter
+		
+		addListenerOnSoftKeyboar(); //listener whether the user presses done/enter
 		addListenerOnTextView(); //act like a button
 
 		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -113,6 +77,17 @@ public class WelcomePage extends Activity {
 		if (!enabled) {
 			showSettingsAlert(WelcomePage.this);
 		}
+
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		findViewById(R.id.welcomeBackground).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_out));
+       	findViewById(R.id.linearLayoutForLogIn).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
+       	findViewById(R.id.loginArea).startAnimation((Animation) AnimationUtils.loadAnimation(WelcomePage.this, R.anim.fade_in));
+       	addListenerOnSoftKeyboar(); //listener whether the user presses done/enter
+		addListenerOnTextView(); //act like a button
 	}
 
 	public void showSettingsAlert(final Context mContext) {
