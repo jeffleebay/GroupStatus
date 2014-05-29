@@ -789,7 +789,7 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 				TextView text1 = (TextView) layout.findViewById(R.id.text1);
 				text1.setText(" Click me to leave ");
 				TextView text2 = (TextView) layout.findViewById(R.id.text2);
-				text2.setText("↓");
+				text2.setText("���");
 
 				Toast toast = new Toast(getApplicationContext());
 				toast.setGravity(Gravity.BOTTOM, 0, 0);
