@@ -260,8 +260,12 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 		
 		//if the status is uploaded
 		TextView textView_Upload_Button = (TextView) findViewById(R.id.textView_ReportButton);
-		if(textView_Upload_Button.getAlpha()== (float) 0.98)
-			finish();			
+		if(textView_Upload_Button.getAlpha()== (float) 0.98){
+
+			//			finish();	//It might go back to log in page when you finish this activity right after you log in 			
+			Intent i = new Intent(CollectStatusAndSensorData.this, LoadingPage.class);
+			startActivity(i);
+		}
 	}
 	
 	@Override
@@ -787,22 +791,18 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 				View layout = inflater.inflate(R.layout.toast_layout,(ViewGroup) findViewById(R.id.toast_layout_root));
 
 				TextView text1 = (TextView) layout.findViewById(R.id.text1);
-				text1.setText(" Click me to leave ");
+				text1.setText(" Thanks for updating ");
 				TextView text2 = (TextView) layout.findViewById(R.id.text2);
-				text2.setText("���");
+				text2.setText(" Click here to leave ");
 
 				Toast toast = new Toast(getApplicationContext());
 				toast.setGravity(Gravity.BOTTOM, 0, 0);
-				toast.setDuration(Toast.LENGTH_LONG);
+				toast.setDuration(Toast.LENGTH_SHORT);
 				toast.setView(layout);
 				toast.show();
 				
-				//Change UI
-				ImageView imageView_Upload_Button = (ImageView) findViewById(R.id.Button_Sensor_Upload);
-				imageView_Upload_Button.setEnabled(false); 
-				TextView textView_Upload_Button = (TextView) findViewById(R.id.textView_ReportButton);
-				textView_Upload_Button.setTextColor(Color.GRAY);
-				textView_Upload_Button.setAlpha((float) 0.98);
+				//Change UI for showing "successfully uploaded"
+				
 				ImageView imageView_checked_Upload = (ImageView) findViewById(R.id.imageView_checked_Upload);
 				imageView_checked_Upload.setVisibility(View.VISIBLE);
 				
@@ -833,6 +833,16 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 						nameValuePairs.get(8).getValue(),
 						nameValuePairs.get(9).getValue(), 0);  //0 = false = not uploaded yet
 	    	}
+	    	
+	    	//Change the UI to prevent re-upload
+	    	ImageView imageView_Upload_Button = (ImageView) findViewById(R.id.Button_Sensor_Upload);
+			imageView_Upload_Button.setEnabled(false); 
+	    	TextView textView_Upload_Button = (TextView) findViewById(R.id.textView_ReportButton);
+			textView_Upload_Button.setTextColor(Color.GRAY);
+
+			//Change the alpha so the activity could restart after the status is uploaded  
+			textView_Upload_Button.setAlpha((float) 0.98);
+	    	
 	    	statusDataSource.close();
 	    }
 	  }	
