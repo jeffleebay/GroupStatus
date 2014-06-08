@@ -312,6 +312,9 @@ public class WelcomePage extends Activity {
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		calendar.set(Calendar.MONTH, month);
 		calendar.set(Calendar.DATE, date);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
 
 		for (int i = 0; i < experimentHour.length; i++) {
 			calendar.set(Calendar.HOUR_OF_DAY, experimentHour[i]);
