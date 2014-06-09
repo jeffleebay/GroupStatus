@@ -303,8 +303,7 @@ public class WelcomePage extends Activity {
 		int experimentHour[] = { 9, 12, 15, 18, 21 };
 
 		getBaseContext();
-		AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-		Intent intent = new Intent(this, NotificationPublisher.class);
+		
 
 		month--; //January = 0 ...
 		
@@ -319,6 +318,8 @@ public class WelcomePage extends Activity {
 		for (int i = 0; i < experimentHour.length; i++) {
 			calendar.set(Calendar.HOUR_OF_DAY, experimentHour[i]);
 			for (int j = 0; j < days; j++) {
+				Intent intent = new Intent(this, NotificationPublisher.class);
+				AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 				calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) + j);
 				int currentTime = (int) System.currentTimeMillis(); //use the current time as id
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), currentTime, intent,PendingIntent.FLAG_UPDATE_CURRENT);

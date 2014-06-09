@@ -3,6 +3,7 @@ import java.util.Calendar;
 
 import luci.uci.edu.groupstatus.LoadingPage;
 import luci.uci.edu.groupstatus.R;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +13,8 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
+import android.util.Log;
  
 public class NotificationPublisher extends BroadcastReceiver {
  
@@ -28,7 +31,6 @@ public class NotificationPublisher extends BroadcastReceiver {
 // 
 //    }
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	 public void onReceive(Context context, Intent paramIntent) {
 		
@@ -46,8 +48,8 @@ public class NotificationPublisher extends BroadcastReceiver {
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
-	 
-	 // Request the notification manager
+
+		// Request the notification manager
 	 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 	 
 	 // Create a new intent which will be fired if you click on the notification
@@ -58,15 +60,41 @@ public class NotificationPublisher extends BroadcastReceiver {
 	 
 	 Calendar calendar = Calendar.getInstance();
 	 calendar.setTimeInMillis(System.currentTimeMillis());
-	 // Create the notification
-	 Notification notification = new Notification(R.drawable.ic_launcher_notification, "Group Status", System.currentTimeMillis());
-	 notification.setLatestEventInfo(context, "Group Status", "Time to update your status!",pendingIntent);
 	 
+	 // Create the notification
+	 
+//	 old API
+//	 Notification notification = new Notification(R.drawable.ic_launcher_notification, "Group Status", System.currentTimeMillis());
+//	 notification.setLatestEventInfo(context, "Group Status", "Time to update your status!",pendingIntent);
+	 
+	 Notification.Builder notificationBuilder = new Notification.Builder(context)
+     .setContentTitle("Group Status")
+     .setContentText("Time to update your status!")
+     .setSmallIcon(R.drawable.ic_launcher_notification)
+     .setContentIntent(pendingIntent)
+     .setWhen(System.currentTimeMillis());
+     //.build();
+	 
+	 Notification notification = null;
+	 
+	 //NotificationBuilder.build() requires API Level 16 or higher.
+	 //Anything between API Level 11 & 15 you should use NotificationBuilder.getNotification().
+
+	 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+		 	Log.v("version", "16 up");
+			notification = notificationBuilderForApi16AndUP(notificationBuilder);
+		} else {
+			Log.v("version", "11 to 15");
+			notification = notificationBuilderForApi11to15(notificationBuilder);
+		}
+
 	 //only one notification in a minute at most
 	 int notifyID = calendar.get(Calendar.DAY_OF_YEAR)*1000+calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE);
 	 // Fire the notification
 	 notificationManager.notify(notifyID, notification);
 
+	 
+	 
 //the popup dialog is quite annoying
 	 
 //	// Launch the alarm popup dialog
@@ -81,5 +109,15 @@ public class NotificationPublisher extends BroadcastReceiver {
 //     // Start the popup activity
 //     context.startActivity(alarmIntent);
 	 }
+	
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	private Notification notificationBuilderForApi16AndUP(Notification.Builder notificationBuilder){
+		return notificationBuilder.build();
+	}
+	
+	@SuppressWarnings("deprecation")
+	private Notification notificationBuilderForApi11to15(Notification.Builder notificationBuilder){
+		return notificationBuilder.getNotification();
+	}
 
 }
