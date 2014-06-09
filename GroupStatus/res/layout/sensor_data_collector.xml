@@ -80,7 +80,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:contentDescription="WiFi icon"
-                    android:src="@drawable/wifi" />
+                    android:src="@drawable/ic_action_network_wifi" />
 
                 <TextView
                     android:id="@+id/textView_WiFi"
@@ -192,7 +192,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:contentDescription="Noise icon"
-                    android:src="@drawable/noise" />
+                    android:src="@drawable/ic_action_mic" />
 
                 <TextView
                     android:id="@+id/textView_Noise"
@@ -304,7 +304,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:contentDescription="Location icon"
-                    android:src="@drawable/location" />
+                    android:src="@drawable/ic_action_location_found" />
 
                 <TextView
                     android:id="@+id/textView_Location"

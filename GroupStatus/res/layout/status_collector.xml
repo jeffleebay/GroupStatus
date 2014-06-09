@@ -74,7 +74,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:contentDescription="Status icon"
-                android:src="@drawable/wifi" />
+                android:src="@drawable/ic_action_edit" />
 
             <TextView
                 android:id="@+id/textView_Status"
@@ -184,7 +184,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:contentDescription="GroupStatus icon"
-                android:src="@drawable/wifi" />
+                android:src="@drawable/ic_action_paste" />
 
             <TextView
                 android:id="@+id/textView_GroupStatus"
