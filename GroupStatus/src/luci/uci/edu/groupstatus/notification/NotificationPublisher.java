@@ -1,9 +1,8 @@
 package luci.uci.edu.groupstatus.notification;
 import java.util.Calendar;
 
+import luci.uci.edu.groupstatus.LoadingPage;
 import luci.uci.edu.groupstatus.R;
-import luci.uci.edu.groupstatus.WelcomePage;
-import luci.uci.edu.groupstatus.R.drawable;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -52,7 +51,7 @@ public class NotificationPublisher extends BroadcastReceiver {
 	 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 	 
 	 // Create a new intent which will be fired if you click on the notification
-	 Intent intent = new Intent(context, WelcomePage.class);
+	 Intent intent = new Intent(context, LoadingPage.class);
 	 
 	 // Attach the intent to a pending intent
 	 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

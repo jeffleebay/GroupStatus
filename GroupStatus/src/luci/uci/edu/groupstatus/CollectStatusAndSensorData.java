@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -136,7 +138,8 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 		EditText etStatus = (EditText) findViewById(R.id.EditText_Update_Status);
 		etStatus.setHint("What are you doing now?\nEx. Taking a bus to buy groceries in Trader Joes with roommates #lifeexpense #dinner #toohot #universitytowncenter");
 		EditText etGroupStatus = (EditText) findViewById(R.id.EditText_Update_GroupStatus);
-		etGroupStatus.setHint("Guess what others are doing now?\nLeave it blank and click Update if you don't want to.");
+//		etGroupStatus.setHint("Guess what others are doing now?\nLeave it blank and click Update if you don't want to.");
+		etGroupStatus.setHint("Guess what your friend is doing now?\nIt's fine you guess wrong so just try your best.");
 		
 		//Set Buttons
 		final TextView tvNext = (TextView) findViewById(R.id.Button_Status_Next);
@@ -701,9 +704,12 @@ public class CollectStatusAndSensorData extends Activity implements OnClickListe
 			nameValuePairs.add(new BasicNameValuePair("group", group));
 			
 			//Add time stamp
-			Time today = new Time(Time.getCurrentTimezone());
-			today.setToNow();
-			String currentTime = Integer.toString(today.month + 1) + "/" + Integer.toString(today.monthDay) + "," + today.format("%k:%M:%S");
+			Calendar timestamp = Calendar.getInstance();
+			timestamp.setTimeInMillis(System.currentTimeMillis());
+			 
+			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm:ss", Locale.US); //java.util.Locale.getDefault()
+			String currentTime = null;
+			if(timestamp != null) currentTime = sdf.format(timestamp.getTime());
 			nameValuePairs.add(new BasicNameValuePair("timestamp", currentTime));
 
 			// Add sensor data       
